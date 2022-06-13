@@ -89,5 +89,5 @@ while line:
     except UnicodeDecodeError as u:
         pass
 
-f.write("#Survived")
+f.write("#Survived\n")
 f.close()
