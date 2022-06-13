@@ -13,8 +13,9 @@ import argparse
 parser = argparse.ArgumentParser(description='Process data from stdin do regexp and store output. First line is the name of the stream i.e. filename of gzip output or url. Each line is prefixed with the line number starting at 1')
 
 parser.add_argument("-n","--name" ,required=True, help="Name where stdin cam from i.e compressed filename or URL")
-args = parser.parse_args()
+parser.add_argument("-t","--target", required=True, help="Target where the data should be written")
 
+args = parser.parse_args()
 
 
 #Uses at least 10GB of memory
@@ -63,8 +64,12 @@ rd = {
 url_regex = "((http|https|ftp)?(?:\://)?([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|localhost|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.onion)(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&%\$#\=~_\-]+))*)"
 
 re.compile(url_regex)
+
+#FIXME don't care if target file exists
+f = open(args.target, "w")
+
 cnt=0
-print ("#"+args.name)
+f.write("#"+args.name+"\n")
 line = sys.stdin.readline()
 while line:
     # do stuff with line
@@ -73,8 +78,12 @@ while line:
     #findall seems to return groups of the regexp fields
     for i in  (re.findall(url_regex, line)):
         for u in i:
-             print (cnt,"|url_regexp|",u)
+             f.write (str(cnt)+"|url_regexp|"+u + "\n")
     #Try to find crypocurrencies
     for c in rd.keys():
         for u in re.findall(rd[c]['regex'], line):
-            print (cnt,"|"+rd[c]['name']+"|"+u)
+            f.write(str(cnt),"|"+rd[c]['name']+"|"+u+ "\n")
+
+
+f.write("#Survived")
+fclose()
