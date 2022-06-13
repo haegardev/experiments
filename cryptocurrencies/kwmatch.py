@@ -81,7 +81,8 @@ while line:
         #findall seems to return groups of the regexp fields
         for i in  (re.findall(url_regex, line)):
             for u in i:
-                f.write (str(cnt)+"|url_regexp|"+u + "\n")
+                if len(u) > 0:
+                    f.write (str(cnt)+"|url_regexp|"+u + "\n")
         #Try to find crypocurrencies
         for c in rd.keys():
             for u in re.findall(rd[c]['regex'], line):
