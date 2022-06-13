@@ -14,6 +14,7 @@ parser = argparse.ArgumentParser(description='Process data from stdin do regexp 
 
 parser.add_argument("-n","--name" ,required=True, help="Name where stdin cam from i.e compressed filename or URL")
 parser.add_argument("-t","--target", required=True, help="Target where the data should be written")
+parser.add_argument("-o", "--orginal", required=True, help="Original name of the data chunk)")
 
 args = parser.parse_args()
 
@@ -69,7 +70,8 @@ re.compile(url_regex)
 f = open(args.target, "w")
 
 cnt=0
-f.write("#"+args.name+"\n")
+f.write("#Original source:" + args.orginal+"\n")
+f.write("#Name:"+args.name+"\n")
 line = sys.stdin.readline()
 while line:
     try:
