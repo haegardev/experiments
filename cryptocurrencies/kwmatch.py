@@ -72,18 +72,20 @@ cnt=0
 f.write("#"+args.name+"\n")
 line = sys.stdin.readline()
 while line:
-    # do stuff with line
-    line = sys.stdin.readline()
-    cnt+=1
-    #findall seems to return groups of the regexp fields
-    for i in  (re.findall(url_regex, line)):
-        for u in i:
-             f.write (str(cnt)+"|url_regexp|"+u + "\n")
-    #Try to find crypocurrencies
-    for c in rd.keys():
-        for u in re.findall(rd[c]['regex'], line):
-            f.write(str(cnt),"|"+rd[c]['name']+"|"+u+ "\n")
-
+    try:
+        # do stuff with line
+        line = sys.stdin.readline()
+        cnt+=1
+        #findall seems to return groups of the regexp fields
+        for i in  (re.findall(url_regex, line)):
+            for u in i:
+                f.write (str(cnt)+"|url_regexp|"+u + "\n")
+        #Try to find crypocurrencies
+        for c in rd.keys():
+            for u in re.findall(rd[c]['regex'], line):
+                f.write(str(cnt)+"|"+rd[c]['name']+"|"+u+ "\n")
+    except UnicodeDecodeError as u:
+        pass
 
 f.write("#Survived")
-fclose()
+f.close()
