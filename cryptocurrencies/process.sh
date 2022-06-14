@@ -6,7 +6,11 @@ URL=$1
 FILENAME=$1
 PARTIAL="$HOME/results"
 RESULTS="$HOME/datasets"
+JOBS=$2
 
+if [ -z $JOBS ]; then
+    JOBS=4
+fi
 
 if [ -z $URL ]; then
     echo "An url must be specified" >$2
@@ -18,15 +22,25 @@ CHUNK_SIZE=1000000
 CHUNKS="$HOME/chunks"
 DOWN="$HOME/down"
 
+
+
+#Delete all old content to have no mess
+
+rm -rf $DOWN
+mkdir $DOWN
+rm -rf $CHUNKS
+mkdir $CHUNKS
+
 #CURL pipe | gzip does not work. Curl stops if to slow or whatever
-#wget $URL -o $DOWN/dataset.gz
+wget $URL -o $DOWN/dataset.gz
 
 SHA256=`sha256sum $DOWN/dataset.gz`
 cd $CHUNKS
 zcat $DOWN/dataset.gz | gzip -c  | split -l  $CHUNK_SIZE -a 6 --numeric-suffixes
 
 
-#find down/ -type f | sort | parallel -j 4 'cat {} | ~/experiments/cryptocurrencies/kwmatch.py -n {} -t ~/$PARTIAL/`basename {}`.txt'
+#find $CHUNKS -type f | sort | parallel -j 4 'cat {} | $HOME/experiments/cryptocurrencies/kwmatch.py -n {} -t $PARTIAL/`basename {}`.txt'
+find $CHUNKS -type f | sort | parallel -j 4 'cat {} | wc -c > $PARTIAL/`basename {}`.txt'
 
 PROCTIME=`date "+%y/%m/%d %H:%M:%S"`
 MTIME=`date "+%y/%m/%d %H:%M:%S"`
@@ -57,7 +71,9 @@ done
 DTIME=`date "+%y/%m/%d %H:%M:%S"`
 
 echo "#Finished: $DTIME" >> $RSN
-gzip $RSN
+gzip -f $RSN
 
-#TODO remove partial results
-#TODO remove downloaded stuff
+rm -rf $DOWN
+mkdir $DOWN
+rm -rf $CHUNKS
+mkdir $CHUNKS
