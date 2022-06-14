@@ -36,11 +36,11 @@ wget $URL -O $DOWN/dataset.gz
 
 SHA256=`sha256sum $DOWN/dataset.gz`
 cd $CHUNKS
-zcat $DOWN/dataset.gz | gzip -c  | split -l  $CHUNK_SIZE -a 6 --numeric-suffixes
+zcat $DOWN/dataset.gz | split -l  $CHUNK_SIZE -a 6 --numeric-suffixes
 
 
 #find $CHUNKS -type f | sort | parallel -j 4 'cat {} | $HOME/experiments/cryptocurrencies/kwmatch.py -n {} -t $PARTIAL/`basename {}`.txt'
-find $CHUNKS -type f | sort | parallel -j 4 'cat {} | wc -c > $PARTIAL/`basename {}`.txt'
+find $CHUNKS -type f | sort | parallel -j 4 "cat {} | wc -c > $PARTIAL/`basename {}`.txt"
 
 PROCTIME=`date "+%y/%m/%d %H:%M:%S"`
 MTIME=`date "+%y/%m/%d %H:%M:%S"`
