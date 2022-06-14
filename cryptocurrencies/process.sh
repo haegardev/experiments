@@ -32,7 +32,7 @@ rm -rf $CHUNKS
 mkdir $CHUNKS
 
 #CURL pipe | gzip does not work. Curl stops if to slow or whatever
-wget $URL -o $DOWN/dataset.gz
+wget $URL -O $DOWN/dataset.gz
 
 SHA256=`sha256sum $DOWN/dataset.gz`
 cd $CHUNKS
