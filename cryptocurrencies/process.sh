@@ -4,12 +4,10 @@ START=`date "+%y/%m/%d %H:%M:%S"`
 #take an url download it, split it
 URL=$1
 FILENAME=$1
-PARTIAL="$HOME/results"
-RESULTS="$HOME/datasets"
 JOBS=$2
 
 if [ -z $JOBS ]; then
-    JOBS=4
+    JOBS=$DEAFULT_JOBS
 fi
 
 if [ -z $URL ]; then
@@ -17,10 +15,14 @@ if [ -z $URL ]; then
     exit 1
 fi
 
-#Test if directories exists
-CHUNK_SIZE=1000000
-CHUNKS="$HOME/chunks"
-DOWN="$HOME/down"
+
+if [ ! -e process_config.sh ]; then
+    echo "process_config.sh is missing, abort"
+    exit 1
+fi
+
+. process_config.sh
+#TODO Test if directories exists
 
 
 
