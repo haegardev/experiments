@@ -1,0 +1,7 @@
+DEAFULT_JOBS=4
+PARTIAL="$HOME/results"
+RESULTS="$HOME/datasets"
+CHUNK_SIZE=1000000
+CHUNKS="$HOME/chunks"
+DOWN="$HOME/down"
+
