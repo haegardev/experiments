@@ -29,6 +29,9 @@ mkdir $DOWN
 rm -rf $CHUNKS
 mkdir $CHUNKS
 
+rm -Rf $PARTIAL
+mkdir $PARTIAL
+
 #CURL pipe | gzip does not work. Curl stops if to slow or whatever
 wget $URL -O $DOWN/dataset.gz
 
@@ -68,8 +71,3 @@ DTIME=`date "+%y/%m/%d %H:%M:%S"`
 
 echo "#Finished: $DTIME" >> $RSN
 gzip -f $RSN
-
-rm -rf $DOWN
-mkdir $DOWN
-rm -rf $CHUNKS
-mkdir $CHUNKS
