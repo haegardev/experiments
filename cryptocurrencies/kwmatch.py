@@ -64,7 +64,7 @@ rd = {
 #Taken from: https://github.com/CIRCL/AIL-framework/blob/master/bin/modules/Onion.py
 url_regex = "((http|https|ftp)?(?:\://)?([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|localhost|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.onion)(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&%\$#\=~_\-]+))*)"
 
-re.compile(url_regex)
+c_url_regex = re.compile(url_regex)
 
 #FIXME don't care if target file exists
 f = open(args.target, "w")
@@ -79,7 +79,7 @@ while line:
         line = sys.stdin.readline()
         cnt+=1
         #findall seems to return groups of the regexp fields
-        for i in  (re.findall(url_regex, line)):
+        for i in  (re.findall(c_url_regex, line)):
             for u in i:
                 if len(u) > 0:
                     f.write (str(cnt)+"|url_regexp|"+u + "\n")
