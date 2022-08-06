@@ -21,12 +21,31 @@ with open(args.corpus, "r") as f:
 
 #TODO length parameter
 
+#Cleanup address and write it
+def handle_address(buf):
+    out = []
+    for i in buf:
+        if len(i) > 0:
+            out.append(i)
+    #TODO line number or offset where match happend
+    print  ("ADDRESS|"+args.filename+"|"+",".join(out))
 #minbufflen block needs to have at least 3 lines (name, street name, village)
 def process_buffer(buf, minbufflen=3, maxbufflen=9):
     l  = len(buf)
-    print (l)
+    #Give a score for each block
+    #+5 if there is a known place insite
+    #+1 if there is a number
+    score = 0
     if (l > minbufflen and len(buf) < maxbufflen):
-        pprint.pprint(buf)
+       for line in buf:
+            words = line.split(' ')
+            for word in words:
+                word = word.upper()
+                if word in corpus:
+                    score=score  + 5
+       #Ranking of highest scores needed?
+       if score > 0:
+            handle_address(buf)
 
 with open (args.filename,"r") as f:
     line  = f.readline()
