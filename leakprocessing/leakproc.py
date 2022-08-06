@@ -8,7 +8,17 @@ parser = argparse.ArgumentParser(description='Process text files to identify bas
 
 parser.add_argument("-f", "--filename", required=True, help="Text file name")
 parser.add_argument("-p","--processed", required=True, help="Procssed files list. To avoid to process the files over and over ")
+parser.add_argument("-c","--corpus", required=True, help="List of known places")
+
 args = parser.parse_args()
+
+#Load corpus of known places
+corpus = dict()
+with open(args.corpus, "r") as f:
+    for line in f.readlines():
+        line = line[:-1]
+        corpus[line]=True
+
 #TODO length parameter
 
 #minbufflen block needs to have at least 3 lines (name, street name, village)
