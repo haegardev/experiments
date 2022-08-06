@@ -9,8 +9,25 @@ parser = argparse.ArgumentParser(description='Process text files to identify bas
 parser.add_argument("-f", "--filename", required=True, help="Text file name")
 parser.add_argument("-p","--processed", required=True, help="Procssed files list. To avoid to process the files over and over ")
 parser.add_argument("-c","--corpus", required=True, help="List of known places")
+parser.add_argument("-e", "--exclude",required=False, help="Exclude list. If a word in this list is in the text block, the text block is skipped")
 
 args = parser.parse_args()
+
+#Load exclude list
+exclist = dict()
+if args.exclude is not None:
+    with open(args.exclude,"r") as f:
+        for line in f.readlines():
+            line = line[:-1]
+            exclist[line]=True
+
+
+#Return True if line matches exclude
+#Maybe more flexible matching must be done
+def check_exclude(line):
+    if line in exclist:
+        return True
+    return False
 
 #Load corpus of known places
 corpus = dict()
@@ -38,6 +55,8 @@ def process_buffer(buf, minbufflen=3, maxbufflen=9):
     score = 0
     if (l > minbufflen and len(buf) < maxbufflen):
        for line in buf:
+            if check_exclude(line):
+                return None
             words = line.split(' ')
             for word in words:
                 word = word.upper()
