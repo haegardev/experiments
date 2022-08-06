@@ -23,10 +23,12 @@ if args.exclude is not None:
 
 
 #Return True if line matches exclude
+#Exact match gives bad results
 #Maybe more flexible matching must be done
 def check_exclude(line):
-    if line in exclist:
-        return True
+    for e in exclist:
+        if line.find(e) > -1:
+            return True
     return False
 
 #Load corpus of known places
