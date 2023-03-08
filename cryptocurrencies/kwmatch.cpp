@@ -89,6 +89,9 @@ void kwmatch::prepare(void)
         cstrPatterns.push_back(pattern.c_str());
     }
 
+    for (const char* cstr: cstrPatterns){
+        cout << "[DEBUG] cstring regexp going to hs_compile_multi:" << cstr <<endl;
+    }
 
     err = hs_compile_multi(cstrPatterns.data(), this->flags.data(), this->ids.data(), this->ids.size(), HS_MODE_STREAM, NULL, &(this->db), &compile_err);
 
