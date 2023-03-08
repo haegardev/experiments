@@ -28,7 +28,9 @@
 #include <iostream>
 #include <fstream>
 #include <getopt.h>
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 using namespace std;
 
 class kwmatch
@@ -41,6 +43,7 @@ class kwmatch
         void usage(void);
         bool load_regexp_file(void);
         void prepare(void);
+        void process(void);
     private:
         vector <string> regexps;
         vector <string> names;
@@ -52,6 +55,8 @@ class kwmatch
         hs_scratch_t *scratch;
         hs_stream_t *stream;
         size_t matchCount = 0;
+        unsigned char* buffer;
+        size_t buffer_size = 4096;
 };
 
 /*
@@ -165,6 +170,24 @@ void kwmatch::usage(void)
     cout << "Format id flag name regexp" <<endl;
 }
 
+/*
+ * Read from standard input and apply regular expressions on buffer
+ */
+
+void kwmatch::process(void)
+{
+    this->buffer = (unsigned char*)calloc(this->buffer_size,1);
+    size_t nread = 0;
+    if (this->buffer != NULL) {
+        do {
+            nread = read(STDIN_FILENO, this->buffer, this->buffer_size);
+            cerr<<"[DEBUG] Read "<< nread << " bytes" <<endl;
+        } while (nread > 0);
+    } else {
+        cerr << "[ERROR] cannot allocate buffer. Requested size="<<this->buffer_size<<endl;
+    }
+}
+
 int main(int argc, char* argv[])
 {
     kwmatch kw;
@@ -204,7 +227,7 @@ int main(int argc, char* argv[])
  } while(next_option != -1);
 
     if (!kw.file.empty()){
-        kw.prepare();
+        kw.process();
    }
 	return EXIT_SUCCESS;
 }
