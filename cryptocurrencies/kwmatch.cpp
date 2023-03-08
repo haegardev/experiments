@@ -55,7 +55,7 @@ class kwmatch
         hs_scratch_t *scratch;
         hs_stream_t *stream;
         size_t matchCount = 0;
-        unsigned char* buffer;
+        char* buffer;
         size_t buffer_size = 4096;
 };
 
@@ -187,12 +187,22 @@ void kwmatch::usage(void)
 
 void kwmatch::process(void)
 {
-    this->buffer = (unsigned char*)calloc(this->buffer_size,1);
+    hs_error_t err;
+
+    this->prepare();
+
+    this->buffer = (char*)calloc(this->buffer_size,1);
     size_t nread = 0;
     if (this->buffer != NULL) {
         do {
             nread = read(STDIN_FILENO, this->buffer, this->buffer_size);
             cerr<<"[DEBUG] Read "<< nread << " bytes" <<endl;
+            if (nread > 0 and (nread < buffer_size)) {
+                err = hs_scan_stream(this->stream, this->buffer, nread, 0, scratch, onMatch, &matchCount);
+                if (err != HS_SUCCESS) {
+                    cerr<<"[ERROR] hs_scan returned error="<<err<<endl;
+                }
+            }
         } while (nread > 0);
     } else {
         cerr << "[ERROR] cannot allocate buffer. Requested size="<<this->buffer_size<<endl;
