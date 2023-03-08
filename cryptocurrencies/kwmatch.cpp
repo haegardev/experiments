@@ -94,17 +94,17 @@ void kwmatch::prepare(void)
 
     if (err != HS_SUCCESS) {
         cerr << "Could not compile regexp. Cause=" << compile_err->message << endl;
-        this->scratch = NULL;
-        err = hs_alloc_scratch(db, &this->scratch);
-        if (err != HS_SUCCESS) {
-            cerr<< "[ERROR] Could not allocate scratch space. Error=" << err <<  endl;
-        }
+    }
+    this->scratch = NULL;
+    err = hs_alloc_scratch(db, &this->scratch);
+    if (err != HS_SUCCESS) {
+        cerr<< "[ERROR] Could not allocate scratch space. Error=" << err <<  endl;
+    }
 
-       this->stream = NULL;
-       err = hs_open_stream(db, 0, &(this->stream));
-       if (err != HS_SUCCESS) {
+    this->stream = NULL;
+    err = hs_open_stream(db, 0, &(this->stream));
+    if (err != HS_SUCCESS) {
            cerr<< "ERROR: cannot open stream" << endl;
-       }
     }
 }
 
