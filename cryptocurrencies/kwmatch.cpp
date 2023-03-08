@@ -33,6 +33,15 @@
 #include <unistd.h>
 using namespace std;
 
+class kwmatchException
+    {
+    public:
+        kwmatchException(string errorMessage);
+    private:
+        string ErrorMessage;
+};
+
+
 class kwmatch
 {
     public:
@@ -41,7 +50,7 @@ class kwmatch
         string name;
         string original;
         void usage(void);
-        bool load_regexp_file(void);
+        void load_regexp_file(void);
         void prepare(void);
         void process(void);
     private:
@@ -59,6 +68,11 @@ class kwmatch
         size_t buffer_size = 4096;
 };
 
+
+kwmatchException::kwmatchException(string errorMessage)
+{
+    this->ErrorMessage = errorMessage;
+}
 static
 int onMatch(unsigned int id, unsigned long long from, unsigned long long to, unsigned int flags, void *ctx) {
                      size_t *matches = (size_t *)ctx;
@@ -118,7 +132,7 @@ void kwmatch::prepare(void)
  * Returns true on success, false on failure
  */
 
-bool kwmatch::load_regexp_file(void)
+void kwmatch::load_regexp_file(void)
 {
     fstream fp;
     int id;
@@ -161,10 +175,10 @@ bool kwmatch::load_regexp_file(void)
             }
        }
        fp.close();
+       return;
     } else {
-        cerr<<"[ERROR] Cannot open regular expression file "<< this->file <<endl;
+        throw kwmatchException("Cannot open regular expression file.");
     }
-    return false;
  }
 
 void kwmatch::usage(void)
