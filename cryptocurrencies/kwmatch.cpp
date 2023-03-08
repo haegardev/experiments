@@ -38,7 +38,9 @@ class kwmatch
         string file;
         string name;
         string original;
-        //Global variables
+        void usage(void);
+        bool load_regexp_file(void);
+    private:
         vector <string> regexps;
         vector <string> names;
         vector <unsigned> flags;
@@ -52,7 +54,7 @@ class kwmatch
  * Returns true on success, false on failure
  */
 
-bool load_regexp_file(kwmatch kw)
+bool kwmatch::load_regexp_file(void)
 {
     fstream fp;
     int id;
@@ -64,7 +66,7 @@ bool load_regexp_file(kwmatch kw)
 // Expect 4 offsets first for "id" "flag", "name" all the rest goes in regexp
     int idx[3]={0,0,0};
 
-    fp.open(kw.file);
+    fp.open(this->file);
     if (fp.is_open()) {
         while (getline(fp,line)) {
             if (line.rfind("#") == string::npos) {
@@ -86,22 +88,22 @@ bool load_regexp_file(kwmatch kw)
                 //Store only items where all fields are set to avoid segfaults
                 //FIXME flags are ids are not checked
                 if (!(name.empty()) and !(regexp.empty())){
-                    kw.ids.push_back(id);
-                    kw.flags.push_back(flag);
-                    kw.names.push_back(name);
-                    kw.regexps.push_back(regexp);
+                    this->ids.push_back(id);
+                    this->flags.push_back(flag);
+                    this->names.push_back(name);
+                    this->regexps.push_back(regexp);
                     cout<<"id="<<id<<",flag="<<flag<<",name="<<name<<",regexp="<<regexp <<endl;
                 }
             }
        }
        fp.close();
     } else {
-        cerr<<"[ERROR] Cannot open regular expression file "<< kw.file <<endl;
+        cerr<<"[ERROR] Cannot open regular expression file "<< this->file <<endl;
     }
     return false;
  }
 
-void usage(void)
+void kwmatch::usage(void)
 {
     cout << "kwmatch - matches a set of regex defined in a file <file> on stdin"<<endl;
     cout << "kwmatch [-h] [-f filename] [-n name] [-o original] "<< endl;
@@ -138,7 +140,7 @@ int main(int argc, char* argv[])
             switch(next_option)
             {
             case 'h':
-                usage();
+                kw.usage();
                 return EXIT_SUCCESS;
             case 'f':
                 kw.file = string(optarg);
@@ -157,7 +159,7 @@ int main(int argc, char* argv[])
  } while(next_option != -1);
 
     if (!kw.file.empty()){
-        load_regexp_file(kw);
+        kw.load_regexp_file();
    }
 	return EXIT_SUCCESS;
 }
