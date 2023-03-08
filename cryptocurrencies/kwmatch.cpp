@@ -68,6 +68,13 @@ class kwmatchException
     private:
         string ErrorMessage;
         kwmatch* kw;
+
+    friend ostream& operator<<(ostream& os, kwmatchException& kwe)
+    {
+        //TODO maybe return a timestamp too
+        return os<<"[ERROR] "<<kwe.ErrorMessage<<".Command line arguments:"
+        "file="<<kwe.kw->file<<",orginal="<<kwe.kw->original<<",name="<<kwe.kw->name<<endl;
+    }
 };
 
 
@@ -77,6 +84,7 @@ kwmatchException::kwmatchException(kwmatch* kwo, string errorMessage)
     // Store kwmatch object entirely so we have all variables in the Exception
     this->kw = kwo;
 }
+
 
 static
 int onMatch(unsigned int id, unsigned long long from, unsigned long long to, unsigned int flags, void *ctx) {
@@ -273,7 +281,7 @@ int main(int argc, char* argv[])
         try {
             kw.process();
         } catch (kwmatchException kwe) {
-            cout << "[Error]" << endl;
+            cout << kwe;
         }
    }
 	return EXIT_SUCCESS;
