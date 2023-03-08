@@ -31,6 +31,14 @@
 
 using namespace std;
 
+class kwmatch
+{
+    public:
+        string file;
+        string name;
+        string original;
+};
+
 /*
  * Load regular expressions from file with the format
  * id flag name regexp
@@ -99,6 +107,7 @@ void usage(void)
 
 int main(int argc, char* argv[])
 {
+    kwmatch kw;
     int next_option = 0;
     const char* const short_options = "hf:n:t:o";
     const struct option long_options[] = {
@@ -119,11 +128,13 @@ int main(int argc, char* argv[])
                 usage();
                 return EXIT_SUCCESS;
             case 'f':
-                cout << "file:"<<optarg<<endl;
+                kw.file = string(optarg);
                 break;
             case 'n':
+                kw.name = string(optarg);
                 break;
             case 'o':
+                kw.original = string(optarg);
                 break;
             default:
                 /* Something unexpected happended */
@@ -131,7 +142,6 @@ int main(int argc, char* argv[])
             }
         }
  } while(next_option != -1);
-
 
 	return EXIT_SUCCESS;
 }
