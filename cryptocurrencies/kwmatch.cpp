@@ -63,9 +63,9 @@ static
 int onMatch(unsigned int id, unsigned long long from, unsigned long long to, unsigned int flags, void *ctx) {
                      size_t *matches = (size_t *)ctx;
                          (*matches)++;
-        printf("Match id=%d, from=%lld,to=%lld, flags=%d, ctx=%p\n", id, from, to, flags, ctx);
+    cout << "[INFO] pattern match id=" <<id << ",from="<<from <<",falgs="<<flags<<endl;
                          return 0; // continue matching
-                             }
+}
 
 
 
