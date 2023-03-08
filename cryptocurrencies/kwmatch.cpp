@@ -34,9 +34,15 @@ using namespace std;
 class kwmatch
 {
     public:
+        // Command line arguments
         string file;
         string name;
         string original;
+        //Global variables
+        vector <string> regexps;
+        vector <string> names;
+        vector <unsigned> flags;
+        vector <unsigned> ids;
 };
 
 /*
@@ -46,7 +52,7 @@ class kwmatch
  * Returns true on success, false on failure
  */
 
-bool load_regexp_file(char const* filename)
+bool load_regexp_file(kwmatch kw)
 {
     fstream fp;
     int id;
@@ -58,7 +64,7 @@ bool load_regexp_file(char const* filename)
 // Expect 4 offsets first for "id" "flag", "name" all the rest goes in regexp
     int idx[3]={0,0,0};
 
-    fp.open(filename);
+    fp.open(kw.file);
     if (fp.is_open()) {
         while (getline(fp,line)) {
             if (line.rfind("#") == string::npos) {
@@ -77,16 +83,23 @@ bool load_regexp_file(char const* filename)
                 flag = std::stoi(line.substr(idx[0]+1, idx[1]).c_str());
                 name = line.substr(idx[1]+1,idx[2]-idx[1]-1);
                 regexp = line.substr(idx[2]+1,string::npos);
-                cout<<"id="<<id<<",flag="<<flag<<",name="<<name<<",regexp="<<regexp <<endl;
-                //TODO store them in arrays such that they can be taken by hs_compile_multi
+                //Store only items where all fields are set to avoid segfaults
+                //FIXME flags are ids are not checked
+                if (!(name.empty()) and !(regexp.empty())){
+                    kw.ids.push_back(id);
+                    kw.flags.push_back(flag);
+                    kw.names.push_back(name);
+                    kw.regexps.push_back(regexp);
+                    cout<<"id="<<id<<",flag="<<flag<<",name="<<name<<",regexp="<<regexp <<endl;
+                }
             }
        }
        fp.close();
     } else {
-        cerr<<"[ERROR] Cannot open regular expression file "<<filename <<endl;
+        cerr<<"[ERROR] Cannot open regular expression file "<< kw.file <<endl;
     }
     return false;
-}
+ }
 
 void usage(void)
 {
@@ -143,5 +156,8 @@ int main(int argc, char* argv[])
         }
  } while(next_option != -1);
 
+    if (!kw.file.empty()){
+        load_regexp_file(kw);
+   }
 	return EXIT_SUCCESS;
 }
