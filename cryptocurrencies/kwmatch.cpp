@@ -40,12 +40,57 @@ class kwmatch
         string original;
         void usage(void);
         bool load_regexp_file(void);
+        void prepare(void);
     private:
         vector <string> regexps;
         vector <string> names;
         vector <unsigned> flags;
         vector <unsigned> ids;
+
+        // Hyperscan stuff
+        hs_database_t* db;
+        hs_scratch_t *scratch;
+        hs_stream_t *stream;
+        size_t matchCount = 0;
 };
+
+/*
+ * Do all the preparation work for hyperscan
+ */
+//TODO raise exceptions
+void kwmatch::prepare(void)
+{
+    hs_error_t err;
+    hs_compile_error_t *compile_err = NULL;
+    vector<const char*> cstrPatterns;
+
+    this->load_regexp_file();
+    this->db = NULL;
+
+    // Conversion of patterns taken from
+    // https://github.com/intel/hyperscan/blob/master/examples/pcapscan.cc
+    for (const auto &pattern : this->regexps) {
+        cstrPatterns.push_back(pattern.c_str());
+    }
+
+
+    err = hs_compile_multi(cstrPatterns.data(), this->flags.data(), this->ids.data(), this->ids.size(), HS_MODE_STREAM, NULL, &(this->db), &compile_err);
+
+    if (err != HS_SUCCESS) {
+        cerr << "Could not compile regexp. Cause=" << compile_err->message << endl;
+        this->scratch = NULL;
+        err = hs_alloc_scratch(db, &this->scratch);
+        if (err != HS_SUCCESS) {
+            cerr<< "[ERROR] Could not allocate scratch space. Error=" << err <<  endl;
+        }
+
+       this->stream = NULL;
+       err = hs_open_stream(db, 0, &(this->stream));
+       if (err != HS_SUCCESS) {
+           cerr<< "ERROR: cannot open stream" << endl;
+       }
+    }
+}
 
 /*
  * Load regular expressions from file with the format
@@ -159,7 +204,7 @@ int main(int argc, char* argv[])
  } while(next_option != -1);
 
     if (!kw.file.empty()){
-        kw.load_regexp_file();
+        kw.prepare();
    }
 	return EXIT_SUCCESS;
 }
