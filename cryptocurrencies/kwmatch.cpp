@@ -59,6 +59,17 @@ class kwmatch
         size_t buffer_size = 4096;
 };
 
+static
+int onMatch(unsigned int id, unsigned long long from, unsigned long long to, unsigned int flags, void *ctx) {
+                     size_t *matches = (size_t *)ctx;
+                         (*matches)++;
+        printf("Match id=%d, from=%lld,to=%lld, flags=%d, ctx=%p\n", id, from, to, flags, ctx);
+                         return 0; // continue matching
+                             }
+
+
+
+
 /*
  * Do all the preparation work for hyperscan
  */
