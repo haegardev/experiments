@@ -41,11 +41,12 @@ class kwmatch
         string file;
         string name;
         string original;
+        kwmatch();
         void usage(void);
         void load_regexp_file(void);
         void prepare(void);
         void process(void);
-
+        void print_stats(void);
         //Buffer to copy the match in static function needs to access it
         char* buffer;
         size_t buffer_size = 4096;
@@ -63,7 +64,9 @@ private:
         hs_database_t* db;
         hs_scratch_t *scratch;
         hs_stream_t *stream;
+
         //TODO Some metrics not sure if everything is processed
+        size_t read_bytes;
    };
 
 class kwmatchException
@@ -142,7 +145,15 @@ int onMatch(unsigned int id, unsigned long long from, unsigned long long to, uns
 }
 
 
+kwmatch::kwmatch()
+{
+    this->read_bytes = 0;
+}
 
+void kwmatch::print_stats(void)
+{
+    cerr << "[INFO] Number of read bytes: " << this->read_bytes << endl;
+}
 
 /*
  * Do all the preparation work for hyperscan
@@ -284,6 +295,10 @@ void kwmatch::process(void)
                     cerr<<"[ERROR] hs_scan returned error="<<err<<endl;
                 }
             }
+            // update some metrics
+            if (nread > 0) {
+                this->read_bytes += nread;
+            }
         } while (nread > 0);
     } else {
         cerr << "[ERROR] cannot allocate buffer. Requested size="<<this->buffer_size<<endl;
@@ -331,6 +346,7 @@ int main(int argc, char* argv[])
     if (!kw.file.empty()){
         try {
             kw.process();
+            kw.print_stats();
         } catch (kwmatchException kwe) {
             cout << kwe;
         }
