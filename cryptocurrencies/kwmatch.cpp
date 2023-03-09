@@ -85,7 +85,10 @@ kwmatchException::kwmatchException(kwmatch* kwo, string errorMessage)
     this->kw = kwo;
 }
 
-
+/* Problem: Variable to contains the offset where it matched however we do not
+ * know how large the matched string was. Work around modify config file to add
+ * a maximal string excpected per regexp?
+ */
 static
 int onMatch(unsigned int id, unsigned long long from, unsigned long long to, unsigned int flags, void *ctx) {
                      size_t *matches = (size_t *)ctx;
