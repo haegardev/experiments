@@ -136,6 +136,7 @@ int onMatch(unsigned int id, unsigned long long from, unsigned long long to, uns
     for (kw->match_idx = 0; kw->match_idx < kw->match_size / 2; kw->match_idx++){
         swap(kw->match[kw->match_idx], kw->match[kw->match_size - kw->match_idx - 1]);
     }
+    //TODO filter out non printable characters
     cout <<"MATCH:"<<id<<":"<<kw->match<<endl;
     return 0; // continue matching
 }
