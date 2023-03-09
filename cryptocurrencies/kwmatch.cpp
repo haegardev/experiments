@@ -45,7 +45,13 @@ class kwmatch
         void load_regexp_file(void);
         void prepare(void);
         void process(void);
-    private:
+        //Buffer to copy the match in
+        char* buffer;
+        size_t buffer_size = 4096;
+         char* match;
+        size_t match_idx = 0;
+        size_t match_size = 0;
+private:
         vector <string> regexps;
         vector <string> names;
         vector <unsigned> flags;
@@ -55,10 +61,7 @@ class kwmatch
         hs_database_t* db;
         hs_scratch_t *scratch;
         hs_stream_t *stream;
-        size_t matchCount = 0;
-        char* buffer;
-        size_t buffer_size = 4096;
-};
+   };
 
 class kwmatchException
     {
@@ -88,13 +91,38 @@ kwmatchException::kwmatchException(kwmatch* kwo, string errorMessage)
 /* Problem: Variable to contains the offset where it matched however we do not
  * know how large the matched string was. Work around modify config file to add
  * a maximal string excpected per regexp?
+ * Start of match is documented here
+ * https://intel.github.io/hyperscan/dev-reference/compilation.html#som
  */
 static
 int onMatch(unsigned int id, unsigned long long from, unsigned long long to, unsigned int flags, void *ctx) {
-                     size_t *matches = (size_t *)ctx;
-                         (*matches)++;
+                     kwmatch *kw  = (kwmatch*)ctx;
     cout << "[INFO] pattern match id=" <<id << ",from="<<from << ",to=" << to <<",falgs=" << flags<<endl;
-                         return 0; // continue matching
+    //FIXME go back until a space is found. Maybe kill all performance gains
+    //FIXME check if there are more efficient implementations
+    //FIXME also ignores matches going over multiple buffers
+    kw->match_idx = 0;
+    kw->match_size = 0;
+    cout << "BUFFER"<<kw->buffer<<"END BUFFER"<<endl;
+    if ((to>0) and (to<kw->buffer_size)) {
+        kw->match_idx = to -1;
+        kw->match_size = 0;
+        do {
+            if ( kw->buffer[kw->match_idx] !=' ' and kw->buffer[kw->match_idx] != '\n') {
+                cout << "DEBUG: character ="<< kw->buffer[kw->match_idx] <<"kw->match_idx " <<kw->match_idx<<endl;
+                kw->match[kw->match_size] = kw->buffer[kw->match_idx];
+                //FIXME check boundaries
+                kw->match_size++;
+             } else {
+                // Boundary found
+                kw->match[kw->match_size]=0;
+                break;
+             }
+             kw->match_idx--;
+        } while (kw->match_idx > 0);
+    }
+    cout << "MATCH:"<<id<<":"<<kw->match<<endl;
+    return 0; // continue matching
 }
 
 
@@ -225,13 +253,15 @@ void kwmatch::process(void)
     this->prepare();
 
     this->buffer = (char*)calloc(this->buffer_size,1);
+    // Same size than buffer?
+    this->match = (char*)calloc(this->buffer_size,1);
     size_t nread = 0;
     if (this->buffer != NULL) {
         do {
             nread = read(STDIN_FILENO, this->buffer, this->buffer_size);
             cerr<<"[DEBUG] Read "<< nread << " bytes" <<endl;
             if (nread > 0 and (nread < buffer_size)) {
-                err = hs_scan_stream(this->stream, this->buffer, nread, 0, scratch, onMatch, &matchCount);
+                err = hs_scan_stream(this->stream, this->buffer, nread, 0, scratch, onMatch, this);
                 if (err != HS_SUCCESS) {
                     cerr<<"[ERROR] hs_scan returned error="<<err<<endl;
                 }
