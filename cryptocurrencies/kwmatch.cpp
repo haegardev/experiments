@@ -263,7 +263,9 @@ void kwmatch::process(void)
 
     this->buffer = (char*)calloc(this->buffer_size,1);
     this->match = (char*)calloc(this->match_buffer_size,1);
-    //FIXME check
+    if (this->match == NULL) {
+        throw kwmatchException(this, "Cannot allocate memory for  maching buffer");
+    }
     size_t nread = 0;
     if (this->buffer != NULL) {
         do {
