@@ -157,7 +157,7 @@ void kwmatch::prepare(void)
     }
 
     for (const char* cstr: cstrPatterns){
-        cout << "[DEBUG] cstring regexp going to hs_compile_multi:" << cstr <<endl;
+        //cout << "[DEBUG] cstring regexp going to hs_compile_multi:" << cstr <<endl;
     }
 
     err = hs_compile_multi(cstrPatterns.data(), this->flags.data(), this->ids.data(), this->ids.size(), HS_MODE_STREAM, NULL, &(this->db), &compile_err);
@@ -223,7 +223,7 @@ void kwmatch::load_regexp_file(void)
                     this->flags.push_back(flag);
                     this->names.push_back(name);
                     this->regexps.push_back(regexp);
-                    cout<<"id="<<id<<",flag="<<flag<<",name="<<name<<",regexp="<<regexp <<endl;
+                    //cout<<"id="<<id<<",flag="<<flag<<",name="<<name<<",regexp="<<regexp <<endl;
                 }
             }
        }
@@ -270,7 +270,7 @@ void kwmatch::process(void)
     if (this->buffer != NULL) {
         do {
             nread = read(STDIN_FILENO, this->buffer, this->buffer_size);
-            cerr<<"[DEBUG] Read "<< nread << " bytes" <<endl;
+            //cerr<<"[DEBUG] Read "<< nread << " bytes" <<endl;
             if (nread > 0 and (nread < buffer_size)) {
                 err = hs_scan_stream(this->stream, this->buffer, nread, 0, scratch, onMatch, this);
                 if (err != HS_SUCCESS) {
