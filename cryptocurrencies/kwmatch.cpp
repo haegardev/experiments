@@ -63,6 +63,7 @@ private:
         hs_database_t* db;
         hs_scratch_t *scratch;
         hs_stream_t *stream;
+        //TODO Some metrics not sure if everything is processed
    };
 
 class kwmatchException
