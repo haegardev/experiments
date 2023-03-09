@@ -45,10 +45,12 @@ class kwmatch
         void load_regexp_file(void);
         void prepare(void);
         void process(void);
-        //Buffer to copy the match in
+
+        //Buffer to copy the match in static function needs to access it
         char* buffer;
         size_t buffer_size = 4096;
-         char* match;
+        size_t match_buffer_size = 1024;
+        char* match;
         size_t match_idx = 0;
         size_t match_size = 0;
 private:
@@ -97,19 +99,20 @@ kwmatchException::kwmatchException(kwmatch* kwo, string errorMessage)
 static
 int onMatch(unsigned int id, unsigned long long from, unsigned long long to, unsigned int flags, void *ctx) {
                      kwmatch *kw  = (kwmatch*)ctx;
-    cout << "[INFO] pattern match id=" <<id << ",from="<<from << ",to=" << to <<",falgs=" << flags<<endl;
+    //Do not want to have any variables allocated here and reuse existing ones
+    //cout << "[INFO] pattern match id=" <<id << ",from="<<from << ",to=" << to <<",falgs=" << flags<<endl;
     //FIXME go back until a space is found. Maybe kill all performance gains
     //FIXME check if there are more efficient implementations
     //FIXME also ignores matches going over multiple buffers
     kw->match_idx = 0;
     kw->match_size = 0;
-    cout << "BUFFER"<<kw->buffer<<"END BUFFER"<<endl;
+    //cout << "BUFFER"<<kw->buffer<<"END BUFFER"<<endl;
     if ((to>0) and (to<kw->buffer_size)) {
         kw->match_idx = to -1;
         kw->match_size = 0;
         do {
             if ( kw->buffer[kw->match_idx] !=' ' and kw->buffer[kw->match_idx] != '\n') {
-                cout << "DEBUG: character ="<< kw->buffer[kw->match_idx] <<"kw->match_idx " <<kw->match_idx<<endl;
+                //cout << "DEBUG: character ="<< kw->buffer[kw->match_idx] <<"kw->match_idx " <<kw->match_idx<<endl;
                 kw->match[kw->match_size] = kw->buffer[kw->match_idx];
                 //FIXME check boundaries
                 kw->match_size++;
@@ -121,7 +124,13 @@ int onMatch(unsigned int id, unsigned long long from, unsigned long long to, uns
              kw->match_idx--;
         } while (kw->match_idx > 0);
     }
-    cout << "MATCH:"<<id<<":"<<kw->match<<endl;
+
+    //FIXME String must be reversed. Problem I don't know what data I have,
+    //unicode breaks, also to avoid plenty of copies of the string
+    for (kw->match_idx = 0; kw->match_idx < kw->match_size / 2; kw->match_idx++){
+        swap(kw->match[kw->match_idx], kw->match[kw->match_size - kw->match_idx - 1]);
+    }
+    cout <<"MATCH:"<<id<<":"<<kw->match<<endl;
     return 0; // continue matching
 }
 
@@ -253,8 +262,8 @@ void kwmatch::process(void)
     this->prepare();
 
     this->buffer = (char*)calloc(this->buffer_size,1);
-    // Same size than buffer?
-    this->match = (char*)calloc(this->buffer_size,1);
+    this->match = (char*)calloc(this->match_buffer_size,1);
+    //FIXME check
     size_t nread = 0;
     if (this->buffer != NULL) {
         do {
