@@ -102,6 +102,9 @@ kwmatchException::kwmatchException(kwmatch* kwo, string errorMessage)
  * Start of match is documented here
  * https://intel.github.io/hyperscan/dev-reference/compilation.html#som
  * According doc: to The offset after the last byte that matches the expression
+ * Offsets is cumulative on the data that went through hs_scan_stream
+ * if match is in the second buffer the size of the previous must be substracted
+ * it could also be that a match is shared between buffers
  */
 static
 int onMatch(unsigned int id, unsigned long long from, unsigned long long to, unsigned int flags, void *ctx) {
