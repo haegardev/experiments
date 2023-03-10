@@ -56,6 +56,8 @@ class kwmatch
         char* match;
         size_t match_idx = 0;
         size_t match_size = 0;
+        size_t local_offset = 0;
+        size_t read_bytes = 0;
 private:
         vector <string> regexps;
         vector <string> names;
@@ -68,7 +70,6 @@ private:
         hs_stream_t *stream;
 
         //TODO Some metrics not sure if everything is processed
-        size_t read_bytes;
    };
 
 class kwmatchException
@@ -116,13 +117,16 @@ int onMatch(unsigned int id, unsigned long long from, unsigned long long to, uns
     //FIXME also ignores matches going over multiple buffers
     kw->match_idx = 0;
     kw->match_size = 0;
-    //cout << "BUFFER"<<kw->buffer<<"END BUFFER"<<endl;
-    if ((to>0) and (to<kw->buffer_size)) {
-        kw->match_idx = to -1;
+    kw->match[0]=0;//Clear old matches
+    kw->local_offset = to % kw->buffer_size + 1;
+    cout << "[DEBUG]: local offset computation:read bytes=" <<dec<<kw->read_bytes<<endl;
+    cout << "[DEBUG]: local offset computation:local_offset=" <<dec<<kw->local_offset<<endl;
+    if ((kw->local_offset>0) and (kw->local_offset < kw->buffer_size)) {
+        kw->match_idx = kw->local_offset -1;
         kw->match_size = 0;
         do {
             if ( kw->buffer[kw->match_idx] !=' ' and kw->buffer[kw->match_idx] != '\n') {
-                //cout << "DEBUG: character ="<< kw->buffer[kw->match_idx] <<"kw->match_idx " <<kw->match_idx<<endl;
+                cout << "DEBUG: character = "<< kw->buffer[kw->match_idx] <<" kw->match_idx " <<kw->match_idx<<endl;
                 kw->match[kw->match_size] = kw->buffer[kw->match_idx];
                 //FIXME check boundaries
                 kw->match_size++;
@@ -310,16 +314,17 @@ void kwmatch::process(void)
             nread = read(STDIN_FILENO, this->buffer, this->buffer_size-1);
             cerr<<"[DEBUG] Read "<< nread << " bytes" <<endl;
             if (nread > 0 and (nread < buffer_size)) {
+                // update some metrics also needed to compute local offsets in
+                // in the most recent buffer
+                if (nread > 0) {
+                    this->read_bytes += nread;
+                }
                 err = hs_scan_stream(this->stream, this->buffer, nread, 0, scratch, onMatch, this);
                 if (err != HS_SUCCESS) {
                     cerr<<"[ERROR] hs_scan returned error="<<err<<endl;
                 }
             }
-            // update some metrics
-            if (nread > 0) {
-                this->read_bytes += nread;
-            }
-        } while (nread > 0);
+       } while (nread > 0);
     } else {
         cerr << "[ERROR] cannot allocate buffer. Requested size="<<this->buffer_size<<endl;
     }
