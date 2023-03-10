@@ -107,7 +107,7 @@ static
 int onMatch(unsigned int id, unsigned long long from, unsigned long long to, unsigned int flags, void *ctx) {
                      kwmatch *kw  = (kwmatch*)ctx;
     //Do not want to have any variables allocated here and reuse existing ones
-    cout << "[INFO] pattern match id=" <<id << ",from="<<from << ",to=" << to <<" (0x"<<hex<<to <<") ,flags=" << flags<<endl;
+    cout << "[INFO] pattern match id=" <<id << ",from="<<from << ",to=" << dec << to <<" (0x"<<hex<<to <<") ,flags=" << flags<<endl;
     //FIXME go back until a space is found. Maybe kill all performance gains
     //FIXME check if there are more efficient implementations
     //FIXME also ignores matches going over multiple buffers
