@@ -47,6 +47,8 @@ class kwmatch
         void prepare(void);
         void process(void);
         void print_stats(void);
+        void dump_buffer(char* buffer, size_t sz);
+
         //Buffer to copy the match in static function needs to access it
         char* buffer;
         size_t buffer_size = 4096;
@@ -99,6 +101,7 @@ kwmatchException::kwmatchException(kwmatch* kwo, string errorMessage)
  * a maximal string excpected per regexp?
  * Start of match is documented here
  * https://intel.github.io/hyperscan/dev-reference/compilation.html#som
+ * According doc: to The offset after the last byte that matches the expression
  */
 static
 int onMatch(unsigned int id, unsigned long long from, unsigned long long to, unsigned int flags, void *ctx) {
@@ -141,9 +144,23 @@ int onMatch(unsigned int id, unsigned long long from, unsigned long long to, uns
     }
     //TODO filter out non printable characters
     cout <<"MATCH:"<<id<<":"<<kw->match<<endl;
+
     return 0; // continue matching
 }
 
+void kwmatch::dump_buffer(char* buffer, size_t sz)
+{
+    int i,j;
+    j = 1;
+    cout<<j<<": ";
+    for (i = 0; i < sz; i++) {
+        cout<< buffer[i] << " ";
+        if ((i >1) and ((i % 40) == 0)) {
+            j++;
+            cout << endl << j<<": ";
+        }
+    }
+}
 
 kwmatch::kwmatch()
 {
@@ -288,7 +305,7 @@ void kwmatch::process(void)
     if (this->buffer != NULL) {
         do {
             nread = read(STDIN_FILENO, this->buffer, this->buffer_size);
-            //cerr<<"[DEBUG] Read "<< nread << " bytes" <<endl;
+            cerr<<"[DEBUG] Read "<< nread << " bytes" <<endl;
             if (nread > 0 and (nread < buffer_size)) {
                 err = hs_scan_stream(this->stream, this->buffer, nread, 0, scratch, onMatch, this);
                 if (err != HS_SUCCESS) {
@@ -347,6 +364,7 @@ int main(int argc, char* argv[])
         try {
             kw.process();
             kw.print_stats();
+            kw.dump_buffer(kw.buffer, kw.buffer_size);
         } catch (kwmatchException kwe) {
             cout << kwe;
         }
