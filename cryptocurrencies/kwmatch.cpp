@@ -150,7 +150,7 @@ int onMatch(unsigned int id, unsigned long long from, unsigned long long to, uns
         swap(kw->match[kw->match_idx], kw->match[kw->match_size - kw->match_idx - 1]);
     }
     //TODO filter out non printable characters
-    cout <<"MATCH:"<<id<<":"<<kw->match<<endl;
+    cout <<"MATCH:"<<dec<<to<<":"<<dec<<id<<":"<<kw->match<<endl;
 
     return 0; // continue matching
 }
@@ -370,6 +370,7 @@ int main(int argc, char* argv[])
 
     if (!kw.file.empty()){
         try {
+            cout<<"[INFO] MATCH:OFFSET:ID:STRING"<<endl;
             kw.process();
             kw.print_stats();
         } catch (kwmatchException kwe) {
