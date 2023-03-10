@@ -304,7 +304,7 @@ void kwmatch::process(void)
     size_t nread = 0;
     if (this->buffer != NULL) {
         do {
-            nread = read(STDIN_FILENO, this->buffer, this->buffer_size);
+            nread = read(STDIN_FILENO, this->buffer, this->buffer_size-1);
             cerr<<"[DEBUG] Read "<< nread << " bytes" <<endl;
             if (nread > 0 and (nread < buffer_size)) {
                 err = hs_scan_stream(this->stream, this->buffer, nread, 0, scratch, onMatch, this);
@@ -364,7 +364,6 @@ int main(int argc, char* argv[])
         try {
             kw.process();
             kw.print_stats();
-            kw.dump_buffer(kw.buffer, kw.buffer_size);
         } catch (kwmatchException kwe) {
             cout << kwe;
         }
