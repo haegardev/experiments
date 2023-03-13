@@ -137,21 +137,20 @@ int onMatch(unsigned int id, unsigned long long from, unsigned long long to, uns
              }
              kw->match_idx--;
         } while (kw->match_idx > 0);
-    }
 
-    // Discard all matches smaller than 3 character
-    // FIXME add this threshold as paramter
-    if (kw->match_size < 4){
-        return 0;
+        // Discard all matches smaller than 3 character
+        // FIXME add this threshold as paramter
+        if (kw->match_size < 4){
+            return 0;
+        }
+        //FIXME String must be reversed. Problem I don't know what data I have,
+        //unicode breaks, also to avoid plenty of copies of the string
+        for (kw->match_idx = 0; kw->match_idx < kw->match_size / 2; kw->match_idx++){
+            swap(kw->match[kw->match_idx], kw->match[kw->match_size - kw->match_idx - 1]);
+        }
+        //TODO filter out non printable characters
+        cout <<"MATCH:"<<dec<<to<<":"<<dec<<id<<":"<<kw->match<<endl;
     }
-    //FIXME String must be reversed. Problem I don't know what data I have,
-    //unicode breaks, also to avoid plenty of copies of the string
-    for (kw->match_idx = 0; kw->match_idx < kw->match_size / 2; kw->match_idx++){
-        swap(kw->match[kw->match_idx], kw->match[kw->match_size - kw->match_idx - 1]);
-    }
-    //TODO filter out non printable characters
-    cout <<"MATCH:"<<dec<<to<<":"<<dec<<id<<":"<<kw->match<<endl;
-
     return 0; // continue matching
 }
 
