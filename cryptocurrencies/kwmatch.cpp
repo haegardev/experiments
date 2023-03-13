@@ -317,9 +317,7 @@ void kwmatch::process(void)
             if (nread > 0 and (nread < buffer_size)) {
                 // update some metrics also needed to compute local offsets in
                 // in the most recent buffer
-                if (nread > 0) {
-                    this->read_bytes += nread;
-                }
+                this->read_bytes += nread;
                 err = hs_scan_stream(this->stream, this->buffer, nread, 0, scratch, onMatch, this);
                 if (err != HS_SUCCESS) {
                     cerr<<"[ERROR] hs_scan returned error="<<err<<endl;
