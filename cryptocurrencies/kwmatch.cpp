@@ -122,7 +122,7 @@ int onMatch(unsigned int id, unsigned long long from, unsigned long long to, uns
     //cout << "[DEBUG]: local offset computation:read bytes=" <<dec<<kw->read_bytes<<endl;
     //cout << "[DEBUG]: local offset computation:local_offset=" <<dec<<kw->local_offset<<endl;
     if ((kw->local_offset>0) and (kw->local_offset < kw->buffer_size)) {
-        kw->match_idx = kw->local_offset -1;
+        kw->match_idx = kw->local_offset;
         kw->match_size = 0;
         do {
             if ( kw->buffer[kw->match_idx] !=' ' and kw->buffer[kw->match_idx] != '\n') {
