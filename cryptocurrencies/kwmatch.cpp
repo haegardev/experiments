@@ -106,6 +106,11 @@ kwmatchException::kwmatchException(kwmatch* kwo, string errorMessage)
  * Offsets is cumulative on the data that went through hs_scan_stream
  * if match is in the second buffer the size of the previous must be substracted
  * it could also be that a match is shared between buffers
+ * Limitations:
+ * - sometimes IP addresses not seperated by spaces but other characters such
+ *   as = or <. Maybe add a paramter to specify the delimiter
+ * - If the delimter is not know maybe add a parameter with maximum substring size
+ * - If a match is split among multiple buffers the previous buffer is not read
  */
 static
 int onMatch(unsigned int id, unsigned long long from, unsigned long long to, unsigned int flags, void *ctx) {
