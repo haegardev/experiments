@@ -118,7 +118,7 @@ int onMatch(unsigned int id, unsigned long long from, unsigned long long to, uns
     kw->match_idx = 0;
     kw->match_size = 0;
     kw->match[0]=0;//Clear old matches
-    kw->local_offset = to % kw->buffer_size;
+    kw->local_offset = to % (kw->buffer_size-1);
     cout << "[DEBUG]: local offset computation:read bytes=" <<dec<<kw->read_bytes<<endl;
     cout << "[DEBUG]: local offset computation:local_offset=" <<dec<<kw->local_offset<<endl;
     if ((kw->local_offset>0) and (kw->local_offset < kw->buffer_size)) {
