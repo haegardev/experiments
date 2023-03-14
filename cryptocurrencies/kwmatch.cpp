@@ -111,22 +111,22 @@ static
 int onMatch(unsigned int id, unsigned long long from, unsigned long long to, unsigned int flags, void *ctx) {
                      kwmatch *kw  = (kwmatch*)ctx;
     //Do not want to have any variables allocated here and reuse existing ones
-    //cout << "[DEBUG] pattern match id=" <<id << ",from="<<from << ",to=" << dec << to <<" (0x"<<hex<<to <<") ,flags=" << flags<<endl;
+    cout << "[DEBUG] pattern match id=" <<id << ",from="<<from << ",to=" << dec << to <<" (0x"<<hex<<to <<") ,flags=" << flags<<endl;
     //FIXME go back until a space is found. Maybe kill all performance gains
     //FIXME check if there are more efficient implementations
     //FIXME also ignores matches going over multiple buffers
     kw->match_idx = 0;
     kw->match_size = 0;
     kw->match[0]=0;//Clear old matches
-    kw->local_offset = to % kw->buffer_size + 1;
-    //cout << "[DEBUG]: local offset computation:read bytes=" <<dec<<kw->read_bytes<<endl;
-    //cout << "[DEBUG]: local offset computation:local_offset=" <<dec<<kw->local_offset<<endl;
+    kw->local_offset = to % kw->buffer_size;
+    cout << "[DEBUG]: local offset computation:read bytes=" <<dec<<kw->read_bytes<<endl;
+    cout << "[DEBUG]: local offset computation:local_offset=" <<dec<<kw->local_offset<<endl;
     if ((kw->local_offset>0) and (kw->local_offset < kw->buffer_size)) {
-        kw->match_idx = kw->local_offset;
+        kw->match_idx = kw->local_offset-1;
         kw->match_size = 0;
         do {
             if ( kw->buffer[kw->match_idx] !=' ' and kw->buffer[kw->match_idx] != '\n') {
-                //cout << "DEBUG: character = "<< kw->buffer[kw->match_idx] <<" kw->match_idx " <<kw->match_idx<<endl;
+                cout << "DEBUG: character = "<< kw->buffer[kw->match_idx] <<" kw->match_idx " <<kw->match_idx<<endl;
                 kw->match[kw->match_size] = kw->buffer[kw->match_idx];
                 //FIXME check boundaries
                 kw->match_size++;
@@ -313,7 +313,7 @@ void kwmatch::process(void)
     if (this->buffer != NULL) {
         do {
             nread = read(STDIN_FILENO, this->buffer, this->buffer_size-1);
-            //cerr<<"[DEBUG] Read "<< nread << " bytes" <<endl;
+            cerr<<"[DEBUG] Read= "<< dec << nread << ". bytes.read_bytes=" << dec <<this->read_bytes << ". local_offset="<< this->local_offset <<endl;
             if (nread > 0 and (nread < buffer_size)) {
                 // update some metrics also needed to compute local offsets in
                 // in the most recent buffer
