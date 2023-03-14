@@ -204,9 +204,9 @@ void kwmatch::prepare(void)
         cstrPatterns.push_back(pattern.c_str());
     }
 
-    for (const char* cstr: cstrPatterns){
-        //cout << "[DEBUG] cstring regexp going to hs_compile_multi:" << cstr <<endl;
-    }
+    //for (const char* cstr: cstrPatterns){
+    //    cout << "[DEBUG] cstring regexp going to hs_compile_multi:" << cstr <<endl;
+    //}
 
     err = hs_compile_multi(cstrPatterns.data(), this->flags.data(), this->ids.data(), this->ids.size(), HS_MODE_STREAM, NULL, &(this->db), &compile_err);
 
@@ -248,7 +248,10 @@ void kwmatch::load_regexp_file(void)
     fp.open(this->file);
     if (fp.is_open()) {
         while (getline(fp,line)) {
-            if (line.rfind("#") == string::npos) {
+            if (line.length() <= 1) {
+                continue;
+            }
+            if (line[0] != '#') {
                 //regexp could have spaces aswell all the rest goes there
                 j = 0;
                 for (i=0;i<line.length();i++) {
