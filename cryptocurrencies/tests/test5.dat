@@ -1,0 +1,111 @@
+WARC/1.0
+WARC-Type: warcinfo
+WARC-Date: 2023-02-09T08:10:52Z
+WARC-Record-ID: <urn:uuid:f16e0a87-4a2b-4cb9-8642-b72a7247e004>
+Content-Length: 499
+Content-Type: application/warc-fields
+WARC-Filename: CC-MAIN-20230209081052-20230209111052-00851.warc.gz
+
+isPartOf: CC-MAIN-2023-06
+publisher: Common Crawl
+description: Wide crawl of the web for January/February 2023
+operator: Common Crawl Admin (info@commoncrawl.org)
+hostname: ip-10-67-67-110
+software: Apache Nutch 1.19 (modified, https://github.com/commoncrawl/nutch/)
+robots: checked via crawler-commons 1.4-SNAPSHOT (https://github.com/crawler-commons/crawler-commons)
+format: WARC File Format 1.1
+conformsTo: https://iipc.github.io/warc-specifications/specifications/warc-format/warc-1.1/
+
+
+WARC/1.0
+WARC-Type: request
+WARC-Date: 2023-02-09T10:14:58Z
+WARC-Record-ID: <urn:uuid:6ec1fa44-e3a0-4e76-bede-9ece167bc2a9>
+Content-Length: 322
+Content-Type: application/http; msgtype=request
+WARC-Warcinfo-ID: <urn:uuid:f16e0a87-4a2b-4cb9-8642-b72a7247e004>
+WARC-IP-Address: 47.243.253.150
+WARC-Target-URI: http://0409.com.cn/news/shownews.php?id=1123
+
+GET /news/shownews.php?id=1123 HTTP/1.1
+User-Agent: CCBot/2.0 (https://commoncrawl.org/faq/)
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+If-Modified-Since: Thu, 18 Aug 2022 17:45:54 GMT
+Accept-Encoding: br,gzip
+Host: 0409.com.cn
+Connection: Keep-Alive
+
+
+
+WARC/1.0
+WARC-Type: response
+WARC-Date: 2023-02-09T10:14:58Z
+WARC-Record-ID: <urn:uuid:f671a974-5e1c-4765-9d2a-4bc812a3cfe7>
+Content-Length: 39935
+Content-Type: application/http; msgtype=response
+WARC-Warcinfo-ID: <urn:uuid:f16e0a87-4a2b-4cb9-8642-b72a7247e004>
+WARC-Concurrent-To: <urn:uuid:6ec1fa44-e3a0-4e76-bede-9ece167bc2a9>
+WARC-IP-Address: 47.243.253.150
+WARC-Target-URI: http://0409.com.cn/news/shownews.php?id=1123
+WARC-Payload-Digest: sha1:QNZIZNZKDUMTZ4M2FUTCYJKRUMQL6J6X
+WARC-Block-Digest: sha1:NUEYSX7RLGG5IK4BYRHX442ATAMTR7EU
+WARC-Identified-Payload-Type: text/html
+
+HTTP/1.1 200 OK
+Server: nginx
+Date: Thu, 09 Feb 2023 10:14:58 GMT
+Content-Type: text/html;charset=UTF-8
+X-Crawler-Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+X-Crawler-Content-Encoding: gzip
+Content-Length: 39683
+
+
+<!DOCTYPE HTML>
+<html class="oxh met-web" >
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,minimal-ui">
+<meta name="format-detection" content="telephone=no">
+<title>[검증] 슈프림 레드 카드 화이트 디어-대지베트남-세종콜걸</title>
+<meta name="description" content="부산출장마사지오빠가 저를 저녁에 초대했고, 술과 식사를 마치고 배 부르고 욕망이 가득한 느낌이 들었습니다. 환기 할 곳을 찾고 싶었습니다. 저는 Tianhe 근처 시장에 새로운 요리가 있다는 이야기를 형제들에게 들었습니다. , 오빠가 자주 연락하곤했던 고객 센터를줬고, 잠시만 기다려 주시고, 섹시하고 섹시한 여자 몇 명을 보내 주셨어요. 첫눈에 한명 보더니">
+<meta name="keywords" content="세종콜걸">
+<meta name="generator" content="MetInfo 7.5.0" data-variable="../|cn|cn|metv7|2|80|1123" data-user_name="">
+<link href="../favicon.ico?" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="../public/web/css/basic.css?1638002870">
+<link rel="stylesheet" type="text/css" href="../templates/metv7/cache/metinfo.css?1666776289">
+<meta name="google-site-verification" content="gcS17dEfN2pctSwA5MjSoxcO-PbVqzHjRJyPLU9aJl0" />
+<style>
+body{
+    background-color: !important;font-family: !important;}
+h1,h2,h3,h4,h5,h6{font-family: !important;}
+</style>
+<script>(function(){var t=navigator.userAgent;(t.indexOf("rv:11")>=0||t.indexOf("MSIE 10")>=0)&&document.write("<script src=\"../public/plugins/html5shiv.min.js\"><\/script>")})();</script>
+</head>
+<!--[if lte IE 9]>
+<div class="text-xs-center m-b-0 bg-blue-grey-100 alert">
+    <button type="button" class="close" aria-label="Close" data-dismiss="alert">
+        <span aria-hidden="true">×</span>
+    </button>
+http://123gsfsf56hnfdscacacdac.onion
+
+<![endif]-->
+<body >
+<header class='met-head' m-id='met_head' m-type="head_nav">
+    <nav class="navbar navbar-default box-shadow-none met-nav">
+        <div class="container">
+            <div class="row">
+                <div class='met-nav-btn'>
+                                                                    <h3 hidden>대지베트남-세종콜걸</h3>
+                                        <div class="navbar-header pull-xs-left">
+                        <a href="../" class="met-logo vertical-align block pull-xs-left" title="세종콜걸">
+                            <div class="vertical-align-middle">
+                                                                        <img src="../upload/202102/1613291644.png" alt="세종콜걸" class="mblogo" />
+                                    <img src="../upload/202102/1613291581.png" alt="세종콜걸" class="pclogo" />
+                                                                </div>
+                        </a>
+                    </div>
