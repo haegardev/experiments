@@ -156,7 +156,7 @@ int onMatch(unsigned int id, unsigned long long from, unsigned long long to, uns
         //TODO filter out non printable characters
         cout <<"MATCH:"<<dec<<to<<":"<<dec<<id<<":"<<kw->match<<endl;
     } else {
-        cerr<<"[Warning] Local offset did not match to="<<dec<<to<<endl;
+        cerr<<"[Warning] Local offset did not match to="<<dec<<to<<".local_offset="<<dec<<kw->local_offset<<endl;
     }
     return 0; // continue matching
 }
