@@ -25,8 +25,12 @@ for i in `zcat warc.paths.gz`; do
         continue
     fi
     f=`basename $i`
+    if [ -e "./tmp/.$f" ]; then
+        echo "[INFO] file $i was already downloaded"
+        continue
+    fi
     URL="https://data.commoncrawl.org/$i"
-    wget $URL -O "./tmp/.$f"
+    nice -n 19 ionice -c 3 wget $URL -O "./tmp/.$f"
     mv "./tmp/.$f" "tmp/$f"
 done
 
