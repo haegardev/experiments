@@ -3,12 +3,14 @@
 #files. To not fill up the disks  the number of warcs can be fixed
 CRAWL_NUM="CC-MAIN-2023-06"
 MAX_FILES=100
+PROCESSED_URLS="processed_urls.txt"
 
 if [ ! -e "./tmp" ]; then
     mdkir ./tmp
 fi
-#Remove temp downloads
-rm ./tmp/*
+
+touch $PROCESSED_URLS
+
 if [ ! -e "./results" ]; then
     mkdir ./results
 fi
@@ -18,6 +20,10 @@ if [ ! -e warc.paths.gz ]; then
 fi
 
 for i in `zcat warc.paths.gz`; do
+    if [ ! -z "$(grep $i $PROCESSED_URLS)" ]; then
+        echo "[INFO] file $i was already processed"
+        continue
+    fi
     f=`basename $i`
     URL="https://data.commoncrawl.org/$i"
     wget $URL -O "./tmp/.$f"
