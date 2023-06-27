@@ -12,7 +12,7 @@ if [ -e $TF ]; then
         exit 0
 fi
 
-zcat $FILENAME | grep -a onion | tr ' "><' '\n' | grep "\.onion$" > ./results/$F
+nice -n 19 ionice -c 3 zcat $FILENAME | grep -a onion | tr ' "><' '\n' | grep "\.onion$" > ./results/$F
 
 
 # Need to tell download script to not download it again if it is processed
