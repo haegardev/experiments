@@ -13,3 +13,11 @@ if [ -e $TF ]; then
 fi
 
 zcat $FILENAME | grep -a onion | tr ' "><' '\n' | grep "\.onion$" > ./results/$F
+
+
+# Need to tell download script to not download it again if it is processed
+FN=$(basename $FILENAME)
+url="$(zcat warc.paths.gz | grep $FN)"
+#FIXME Not multiproc safe
+echo $url >> processed-urls.txt
+
