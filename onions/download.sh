@@ -4,6 +4,15 @@
 CRAWL_NUM="CC-MAIN-2023-06"
 MAX_FILES=100
 PROCESSED_URLS="processed_urls.txt"
+PIDFILE="download.pid"
+
+if [ -e "$PIDFILE" ]; then
+    echo "[ERROR] A download instance is already running, abort"
+    exit 1
+else
+    echo $$ >$PIDFILE
+fi
+
 if [ ! -e "./tmp" ]; then
     mdkir ./tmp
 fi
@@ -42,4 +51,4 @@ for i in `zcat warc.paths.gz`; do
     mv "./tmp/.$f" "tmp/$f"
 done
 
-
+rm $PIDFILE
