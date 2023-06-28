@@ -3,7 +3,7 @@
 #files. To not fill up the disks  the number of warcs can be fixed
 CRAWL_NUM="CC-MAIN-2023-23"
 MAX_FILES=1000
-PROCESSED_URLS="processed_urls.txt"
+PROCESSED_URLS="processed-urls.txt"
 PIDFILE="download.pid"
 
 if [ -e "$PIDFILE" ]; then
