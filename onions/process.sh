@@ -20,4 +20,5 @@ FN=$(basename $FILENAME)
 url="$(zcat warc.paths.gz | grep $FN)"
 #FIXME Not multiproc safe
 echo $url >> processed-urls.txt
-
+#Delete processed WARC file
+rm $FILENAME
