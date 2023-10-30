@@ -1,7 +1,7 @@
 #!/bin/bash
 #Download sequentialy common crawl data in parallel process it and remove the
 #files. To not fill up the disks  the number of warcs can be fixed
-CRAWL_NUM="CC-MAIN-2023-23"
+CRAWL_NUM="CC-MAIN-2023-40"
 MAX_FILES=1000
 PROCESSED_URLS="processed-urls.txt"
 PIDFILE="download.pid"
