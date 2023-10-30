@@ -5,6 +5,7 @@ CRAWL_NUM="CC-MAIN-2023-23"
 MAX_FILES=1000
 PROCESSED_URLS="processed-urls.txt"
 PIDFILE="download.pid"
+SPEED="50M"
 
 if [ -e "$PIDFILE" ]; then
     echo "[ERROR] A download instance is already running, abort"
@@ -24,7 +25,7 @@ if [ ! -e "./results" ]; then
 fi
 
 if [ ! -e warc.paths.gz ]; then
-    wget https://data.commoncrawl.org/crawl-data/$CRAWL_NUM/warc.paths.gz
+    wget --limit-rate $SPEED https://data.commoncrawl.org/crawl-data/$CRAWL_NUM/warc.paths.gz
 fi
 
 for i in `zcat warc.paths.gz`; do
@@ -48,7 +49,7 @@ for i in `zcat warc.paths.gz`; do
 
     URL="https://data.commoncrawl.org/$i"
 
-    nice -n 19 ionice -c 3 wget $URL -O "./tmp/.$f"
+    nice -n 19 ionice -c 3 wget --limit-rate $SPEED $URL -O "./tmp/.$f"
     mv "./tmp/.$f" "tmp/$f"
 done
 
