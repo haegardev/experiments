@@ -5,13 +5,15 @@
 #include <string.h>
 #include <assert.h>
 #include <stdint.h>
+#include <arpa/inet.h>
 #define BUFSIZE 1024
-void read_from_stdin(char*filename )
+void read_from_stdin(char*filename, redisContext *ctx )
 {
     char *buf;
     int i,j;
     int ts;
-
+    struct in_addr addr;
+    int ip_src, ip_dst;
     char *ptr;
     buf = calloc(BUFSIZE,1);
     char *token;
@@ -37,11 +39,17 @@ void read_from_stdin(char*filename )
                         }
                         printf("%d: \n", ts);
                     break;
-                // add here the next fields that are parsed
                 case 2:
+                    if (inet_pton(AF_INET, token, &addr) < 0){
+                        // Something went wrong
+                        ip_src = 0;
+                    }else{
+                        ip_src = ntohl(addr.s_addr);
+                        }
                     break;
+                // add here the next fields that are parsed
             }
-
+            printf("%d\n",ip_src);
             printf("%d %s\n",i,token);
             token = strtok(NULL, ",");
             i++;
@@ -90,13 +98,11 @@ int main(int argc, char* argv[]){
 
     // Connect to redis
     ctx = redisConnect(redis_server, redis_server_port);
-
     if (ctx != NULL && ctx->err) {
         fprintf(stderr,"[ERROR] Could not connect to redis. %s.\n", ctx->errstr);
         return EXIT_FAILURE;
     }
 
-
-    //read_from_stdin(NULL);
+    read_from_stdin(filename,ctx);
 return EXIT_SUCCESS;
 }
