@@ -23,7 +23,7 @@ void read_from_stdin(char*filename, redisContext *ctx )
     }
 
     while( fgets(buf, BUFSIZE , stdin) ) {
-        printf("%s",buf);
+        //printf("%s",buf);
         i=1;
         token = strtok(buf, ",");
         while(token != NULL)
@@ -37,7 +37,6 @@ void read_from_stdin(char*filename, redisContext *ctx )
                             }
                             ts = atoi(ptr);
                         }
-                        printf("%d: \n", ts);
                     break;
                 case 2:
                     if (inet_pton(AF_INET, token, &addr) < 0){
@@ -64,7 +63,7 @@ void read_from_stdin(char*filename, redisContext *ctx )
             token = strtok(NULL, ",");
             i++;
         }
-        printf("ts=%d,ip_src=%d, ip_dst=%d,proto=%d\n",ts,ip_src,ip_dst,proto);
+        printf("ts=%u,ip_src=%u, ip_dst=%u,proto=%u\n",ts,ip_src,ip_dst,proto);
     }
     free(buf);
 }
