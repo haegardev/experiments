@@ -47,6 +47,15 @@ void read_from_stdin(char*filename, redisContext *ctx )
                         ip_src = ntohl(addr.s_addr);
                         }
                     break;
+
+                case 3:
+                    if (inet_pton(AF_INET, token, &addr) < 0){
+                        // Something went wrong
+                        ip_dst = 0;
+                    }else{
+                        ip_dst = ntohl(addr.s_addr);
+                        }
+                    break;
                 // add here the next fields that are parsed
             }
             printf("%d\n",ip_src);
