@@ -61,11 +61,10 @@ void read_from_stdin(char*filename, redisContext *ctx )
                     break;
                 // add here the next fields that are parsed
             }
-            printf("%d\n",ip_src);
-            printf("%d %s\n",i,token);
             token = strtok(NULL, ",");
             i++;
         }
+        printf("ts=%d,ip_src=%d, ip_dst=%d,proto=%d\n",ts,ip_src,ip_dst,proto);
     }
     free(buf);
 }
