@@ -69,7 +69,7 @@ int main(int argc, char* argv[]){
     filename = calloc(BUFSIZE,1);
     assert(filename);
 
-    while ((opt = getopt(argc, argv, "b:hs:p:q:")) != -1) {
+    while ((opt = getopt(argc, argv, "hs:p:f:")) != -1) {
         switch (opt) {
             case 's':
                 strncpy(redis_server, optarg, BUFSIZE);
