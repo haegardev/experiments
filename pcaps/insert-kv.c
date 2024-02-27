@@ -60,6 +60,7 @@ int main(int argc, char* argv[]){
     int opt;
     char* redis_server;
     char* filename;
+    redisContext* ctx;
 
     int redis_server_port;
     redis_server = calloc(BUFSIZE,1);
@@ -86,6 +87,16 @@ int main(int argc, char* argv[]){
                 fprintf(stderr, "[ERROR] Invalid command line was specified\n");
         }
     }
+
+    // Connect to redis
+    ctx = redisConnect(redis_server, redis_server_port);
+
+    if (ctx != NULL && ctx->err) {
+        fprintf(stderr,"[ERROR] Could not connect to redis. %s.\n", ctx->errstr);
+        return EXIT_FAILURE;
+    }
+
+
     //read_from_stdin(NULL);
 return EXIT_SUCCESS;
 }
