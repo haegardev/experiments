@@ -13,7 +13,7 @@ void read_from_stdin(char*filename, redisContext *ctx )
     int i,j;
     int ts;
     struct in_addr addr;
-    int ip_src, ip_dst;
+    int ip_src, ip_dst,proto;
     char *ptr;
     buf = calloc(BUFSIZE,1);
     char *token;
@@ -55,6 +55,9 @@ void read_from_stdin(char*filename, redisContext *ctx )
                     }else{
                         ip_dst = ntohl(addr.s_addr);
                         }
+                    break;
+                case 4:
+                    proto = atoi(token);
                     break;
                 // add here the next fields that are parsed
             }
