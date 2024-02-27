@@ -3,9 +3,9 @@
 #include <getopt.h>
 #include <hiredis/hiredis.h>
 #include <string.h>
+#include <assert.h>
 #include <stdint.h>
 #define BUFSIZE 1024
-
 void read_from_stdin(char*filename )
 {
     char *buf;
@@ -50,9 +50,42 @@ void read_from_stdin(char*filename )
     free(buf);
 }
 
+void usage(void)
+{
+    printf("Read output of tshark and pipe in kvrocks\n");
+}
+
 int main(int argc, char* argv[]){
 
-    read_from_stdin(NULL);
+    int opt;
+    char* redis_server;
+    char* filename;
 
+    int redis_server_port;
+    redis_server = calloc(BUFSIZE,1);
+    assert(redis_server);
+
+    filename = calloc(BUFSIZE,1);
+    assert(filename);
+
+    while ((opt = getopt(argc, argv, "b:hs:p:q:")) != -1) {
+        switch (opt) {
+            case 's':
+                strncpy(redis_server, optarg, BUFSIZE);
+                break;
+            case 'p':
+                redis_server_port = atoi(optarg);
+                break;
+            case 'f':
+                strncpy(filename, optarg, BUFSIZE);
+                break;
+            case 'h':
+                usage();
+                return EXIT_SUCCESS;
+            default: /* '?' */
+                fprintf(stderr, "[ERROR] Invalid command line was specified\n");
+        }
+    }
+    //read_from_stdin(NULL);
 return EXIT_SUCCESS;
 }
