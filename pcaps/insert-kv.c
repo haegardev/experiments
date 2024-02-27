@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include <arpa/inet.h>
 #define BUFSIZE 1024
+#define PROCESSED_FILES "PROCESSED_FILES"
+
 void read_from_stdin(char*filename, redisContext *ctx )
 {
     char *buf;
@@ -79,8 +81,9 @@ int main(int argc, char* argv[]){
     char* redis_server;
     char* filename;
     redisContext* ctx;
-
     int redis_server_port;
+    redisReply *reply;
+
     redis_server = calloc(BUFSIZE,1);
     assert(redis_server);
 
@@ -112,7 +115,16 @@ int main(int argc, char* argv[]){
         fprintf(stderr,"[ERROR] Could not connect to redis. %s.\n", ctx->errstr);
         return EXIT_FAILURE;
     }
-
+    // Check if the filewas already porcessed
+    reply = redisCommand(ctx, "SISMEMBER %s %s", PROCESSED_FILES, filename);
+    if (reply) {
+       if (reply->integer == 1) {
+            printf("[INFO] The filename %s was already processed, skip it\n", filename);
+            return EXIT_FAILURE;
+       }
+       freeReplyObject(reply);
+    }
+    // Insert the filename in processed list
     read_from_stdin(filename,ctx);
 return EXIT_SUCCESS;
 }
