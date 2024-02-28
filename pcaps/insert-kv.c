@@ -75,6 +75,12 @@ void read_from_stdin(char*filename, redisContext *ctx )
         } else {
             fprintf(stderr,"[ERROR] SIPs could not be recorded %d\n",ip_src);
         }
+        reply = redisCommand(ctx, "SADD %s %u", DIPS, ip_dst);
+        if (reply){
+            freeReplyObject(reply);
+        } else {
+            fprintf(stderr,"[ERROR] SIPs could not be recorded %d\n",ip_src);
+        }
     }
     free(buf);
 }
