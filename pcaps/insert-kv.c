@@ -8,6 +8,8 @@
 #include <arpa/inet.h>
 #define BUFSIZE 1024
 #define PROCESSED_FILES "PROCESSED_FILES"
+#define SIPS "SIPS"
+#define DIPS "DIPS"
 
 void read_from_stdin(char*filename, redisContext *ctx )
 {
@@ -17,6 +19,7 @@ void read_from_stdin(char*filename, redisContext *ctx )
     struct in_addr addr;
     int ip_src, ip_dst,proto;
     char *ptr;
+    redisReply *reply;
     buf = calloc(BUFSIZE,1);
     char *token;
     if (!buf) {
@@ -65,7 +68,13 @@ void read_from_stdin(char*filename, redisContext *ctx )
             token = strtok(NULL, ",");
             i++;
         }
-        printf("ts=%u,ip_src=%u, ip_dst=%u,proto=%u\n",ts,ip_src,ip_dst,proto);
+        printf("ts=%u,ip_src=%u, ip_dst=%u,proto=%u\n",ts,ip_src,ip_dst,proto); 
+        reply = redisCommand(ctx, "SADD %s %u", SIPS, ip_src);
+        if (reply){
+            freeReplyObject(reply);
+        } else {
+            fprintf(stderr,"[ERROR] SIPs could not be recorded %d\n",ip_src);
+        }
     }
     free(buf);
 }
