@@ -128,6 +128,7 @@ int main(int argc, char* argv[]){
     reply = redisCommand(ctx, "SADD %s %s", PROCESSED_FILES, filename);
     if (reply){
         read_from_stdin(filename,ctx);
+        freeReplyObject(reply);
         return EXIT_SUCCESS;
     }
     return EXIT_FAILURE;
