@@ -125,6 +125,10 @@ int main(int argc, char* argv[]){
        freeReplyObject(reply);
     }
     // Insert the filename in processed list
-    read_from_stdin(filename,ctx);
-return EXIT_SUCCESS;
+    reply = redisCommand(ctx, "SADD %s %s", PROCESSED_FILES, filename);
+    if (reply){
+        read_from_stdin(filename,ctx);
+        return EXIT_SUCCESS;
+    }
+    return EXIT_FAILURE;
 }
