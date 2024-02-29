@@ -78,6 +78,18 @@ void read_from_stdin(char*filename, redisContext *ctx )
     free(buf);
 }
 
+// Dump cache to kvrocks
+void dump_cache(redisContext *ctx)
+{
+   uint32_t i;
+   for (i=0; i<SPACE;i++) {
+        if (cache[i]>0){
+            // extremly slow
+            printf("%u %u\n", i,cache[i]);
+        }
+   }
+}
+
 void usage(void)
 {
     printf("Read output of tshark and pipe in kvrocks\n");
@@ -139,6 +151,7 @@ int main(int argc, char* argv[]){
     reply = redisCommand(ctx, "SADD %s %s", PROCESSED_FILES, filename);
     if (reply){
         read_from_stdin(filename,ctx);
+        dump_cache(ctx);
         freeReplyObject(reply);
         return EXIT_SUCCESS;
     }
