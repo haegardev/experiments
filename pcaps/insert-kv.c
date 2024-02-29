@@ -10,14 +10,17 @@
 #define PROCESSED_FILES "PROCESSED_FILES"
 #define SIPS "SIPS"
 #define DIPS "DIPS"
+#define SPACE 4294967296
+// Stupid array for counting IP addresses
 
+uint32_t* cache;
 void read_from_stdin(char*filename, redisContext *ctx )
 {
     char *buf;
     int i,j;
     int ts;
     struct in_addr addr;
-    int ip_src, ip_dst,proto;
+    uint32_t ip_src, ip_dst,proto;
     char *ptr;
     redisReply *reply;
     buf = calloc(BUFSIZE,1);
@@ -68,19 +71,9 @@ void read_from_stdin(char*filename, redisContext *ctx )
             token = strtok(NULL, ",");
             i++;
         }
-        //printf("ts=%u,ip_src=%u, ip_dst=%u,proto=%u\n",ts,ip_src,ip_dst,proto); 
-        reply = redisCommand(ctx, "ZINCRBY %s 1 %u", SIPS, ip_src);
-        if (reply){
-            freeReplyObject(reply);
-        } else {
-            fprintf(stderr,"[ERROR] SIPs could not be recorded %d\n",ip_src);
-        }
-        reply = redisCommand(ctx, "ZINCRBY %s 1 %u", DIPS, ip_dst);
-        if (reply){
-            freeReplyObject(reply);
-        } else {
-            fprintf(stderr,"[ERROR] DIP could not be recorded %d\n",ip_dst);
-        }
+        // Record IP addresses in array to reduce kvrocks queries
+        cache[ip_src]++;
+        cache[ip_dst]++;
     }
     free(buf);
 }
@@ -104,6 +97,9 @@ int main(int argc, char* argv[]){
 
     filename = calloc(BUFSIZE,1);
     assert(filename);
+
+    cache  = calloc(SPACE, sizeof(uint32_t));
+    assert(cache);
 
     while ((opt = getopt(argc, argv, "hs:p:f:")) != -1) {
         switch (opt) {
