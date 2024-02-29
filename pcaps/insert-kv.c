@@ -68,18 +68,18 @@ void read_from_stdin(char*filename, redisContext *ctx )
             token = strtok(NULL, ",");
             i++;
         }
-        printf("ts=%u,ip_src=%u, ip_dst=%u,proto=%u\n",ts,ip_src,ip_dst,proto); 
-        reply = redisCommand(ctx, "SADD %s %u", SIPS, ip_src);
+        //printf("ts=%u,ip_src=%u, ip_dst=%u,proto=%u\n",ts,ip_src,ip_dst,proto); 
+        reply = redisCommand(ctx, "ZINCRBY %s 1 %u", SIPS, ip_src);
         if (reply){
             freeReplyObject(reply);
         } else {
             fprintf(stderr,"[ERROR] SIPs could not be recorded %d\n",ip_src);
         }
-        reply = redisCommand(ctx, "SADD %s %u", DIPS, ip_dst);
+        reply = redisCommand(ctx, "ZINCRBY %s 1 %u", DIPS, ip_dst);
         if (reply){
             freeReplyObject(reply);
         } else {
-            fprintf(stderr,"[ERROR] SIPs could not be recorded %d\n",ip_src);
+            fprintf(stderr,"[ERROR] DIP could not be recorded %d\n",ip_dst);
         }
     }
     free(buf);
