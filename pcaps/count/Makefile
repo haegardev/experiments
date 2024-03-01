@@ -1,12 +1,21 @@
-CXX = g++
-CXXFLAGS = -std=c++11 -Wall
+CC = g++
+CFLAGS = -std=c++11 -Wall -Wextra
+LDFLAGS = -lboost_serialization
 
-TARGET = countpcapitems
+SRCS = countpcapitems.cpp
+OBJS = $(SRCS:.cpp=.o)
+EXEC = countpcapitems
 
-all: $(TARGET)
+.PHONY: all clean
 
-$(TARGET): $(TARGET).cpp
-	$(CXX) $(CXXFLAGS) -o $@ $<
+all: $(EXEC)
+
+$(EXEC): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(TARGET)
+	$(RM) $(OBJS) $(EXEC)
+

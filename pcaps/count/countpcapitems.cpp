@@ -15,6 +15,9 @@ using namespace std;
 #include <cstdlib>
 #include <map>
 #include <fstream>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/serialization/map.hpp>
 
 map <uint32_t, uint32_t> ip_time_line;
 
@@ -79,23 +82,27 @@ void read_from_stdin(char*filename )
     free(buf);
 }
 
+
+/* FIMXE add clean header and say what data it is
+ *format: size_t size of the map  followed by series of uint32_t ip uint32_t frequency
+ */
+bool store_map(const char* filename){
+    ofstream file(filename, std::ios::binary);
+    if (file.is_open()) {
+        boost::archive::binary_oarchive oa(file);
+        oa << ip_time_line;
+        cout<<"Serialized map"<<endl;
+        file.close();
+    } else {
+    cerr << "Error: Unable to open file " << filename << " for writing." << std::endl;
+    }
+    return false;
+}
 int main() {
     const char* filename = "output.bin";
     read_from_stdin(NULL);
-
-    std::ofstream file(filename, std::ios::binary);
-
-    // Check if the file is opened successfully
-    if (!file.is_open()) {
-        std::cerr << "Error: Unable to open file " << filename << " for writing." << std::endl;
-        return 1; // Return with an error code
-    }
-
-    for (const auto& entry : ip_time_line) {
-        file.write(reinterpret_cast<const char*>(&entry.first), sizeof(entry.first));
-        file.write(reinterpret_cast<const char*>(&entry.second), sizeof(entry.second));
-    }
+    cout<<"Start to serailize" <<endl;
+    store_map(filename);
 
     return 0;
 }
-
