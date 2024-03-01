@@ -14,19 +14,17 @@ using namespace std;
 #include <stdint.h>
 #include <cstdlib>
 #include <map>
-
+#include <fstream>
 
 map <uint32_t, uint32_t> ip_time_line;
 
-void read_from_stdin(char*filename, redisContext *ctx )
+void read_from_stdin(char*filename )
 {
     char *buf;
     int i,j;
-    int ts;
     struct in_addr addr;
-    uint32_t ip_src, ip_dst,proto;
+    uint32_t ts,ip_src, ip_dst,proto;
     char *ptr;
-    redisReply *reply;
     buf = (char*)calloc(BUFSIZE,1);
     char *token;
     if (!buf) {
@@ -72,8 +70,8 @@ void read_from_stdin(char*filename, redisContext *ctx )
                     break;
                 // add here the next fields that are parsed
             }
-
-            ip_time_line[ip_src]=ts;
+            // Count IP addresses
+            ++ip_time_line[ip_src];
             token = strtok(NULL, ",");
             i++;
         }
@@ -82,9 +80,20 @@ void read_from_stdin(char*filename, redisContext *ctx )
 }
 
 int main() {
-    read_from_stdin(NULL, NULL);
-     for (auto it = ip_time_line.begin(); it != ip_time_line.end(); ++it) {
-        std::cout << "IP: " << it->first << ", Timestamp: " << it->second << std::endl;
+    const char* filename = "output.bin";
+    read_from_stdin(NULL);
+
+    std::ofstream file(filename, std::ios::binary);
+
+    // Check if the file is opened successfully
+    if (!file.is_open()) {
+        std::cerr << "Error: Unable to open file " << filename << " for writing." << std::endl;
+        return 1; // Return with an error code
+    }
+
+    for (const auto& entry : ip_time_line) {
+        file.write(reinterpret_cast<const char*>(&entry.first), sizeof(entry.first));
+        file.write(reinterpret_cast<const char*>(&entry.second), sizeof(entry.second));
     }
 
     return 0;
