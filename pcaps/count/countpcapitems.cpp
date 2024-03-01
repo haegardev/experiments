@@ -104,5 +104,21 @@ int main() {
     cout<<"Start to serailize" <<endl;
     store_map(filename);
 
+    // Load the serialized data
+    std::ifstream file(filename, std::ios::binary);
+    if (file.is_open()) {
+        boost::archive::binary_iarchive ia(file);
+        ia >> ip_time_line;
+        file.close();
+        std::cout << "Data deserialized successfully." << std::endl;
+
+        // Print the deserialized map
+        for (const auto& entry : ip_time_line) {
+            std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
+        }
+    } else {
+        std::cerr << "Error: Unable to open file " << filename << " for reading." << std::endl;
+        return 1; // Return with an error code
+    }
     return 0;
 }
