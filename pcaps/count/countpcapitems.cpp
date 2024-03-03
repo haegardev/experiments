@@ -19,7 +19,7 @@ using namespace std;
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/serialization/map.hpp>
 #include <filesystem>
-map <uint32_t, uint32_t> ip_time_line;
+map <uint32_t, uint32_t> counted_data;
 
 void read_from_stdin(char*filename )
 {
@@ -74,7 +74,7 @@ void read_from_stdin(char*filename )
                 // add here the next fields that are parsed
             }
             // Count IP addresses
-            ++ip_time_line[ip_src];
+            ++counted_data[ip_src];
             token = strtok(NULL, ",");
             i++;
         }
@@ -86,11 +86,12 @@ void read_from_stdin(char*filename )
 /* FIMXE add clean header and say what data it is
  *format: size_t size of the map  followed by series of uint32_t ip uint32_t frequency
  */
-bool store_map(const char* filename){
-    ofstream file(filename, std::ios::binary);
+
+bool store_map(const std::string& filename, const std::map<uint32_t, uint32_t>& counted_data) {
+    ofstream file(filename, ios::binary);
     if (file.is_open()) {
         boost::archive::binary_oarchive oa(file);
-        oa << ip_time_line;
+        oa << counted_data;
         cout<<"Serialized map"<<endl;
         file.close();
     } else {
@@ -154,18 +155,18 @@ int main(int argc, char* argv[]) {
     target_srcip_file.append("/src_ip.cnt");
     read_from_stdin(NULL);
     cout<<"Start to serailize" <<endl;
-    store_map(filename);
+    store_map(target_srcip_file, counted_data);
 
     // Load the serialized data
-    std::ifstream file(filename, std::ios::binary);
+    std::ifstream file(target_srcip_file, std::ios::binary);
     if (file.is_open()) {
         boost::archive::binary_iarchive ia(file);
-        ia >> ip_time_line;
+        ia >> counted_data;
         file.close();
         std::cout << "Data deserialized successfully." << std::endl;
 
         // Print the deserialized map
-        for (const auto& entry : ip_time_line) {
+        for (const auto& entry : counted_data) {
             std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
         }
     } else {
