@@ -21,7 +21,7 @@ using namespace std;
 #include <filesystem>
 map <uint32_t, uint32_t> counted_data;
 
-void read_from_stdin(char*filename )
+void read_from_stdin(void)
 {
     char *buf;
     int i,j;
@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
     }
     target_srcip_file = target;
     target_srcip_file.append("/src_ip.cnt");
-    read_from_stdin(NULL);
+    read_from_stdin();
     cout<<"Start to serailize" <<endl;
     store_map(target_srcip_file, counted_data);
 
