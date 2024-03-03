@@ -98,6 +98,17 @@ bool store_map(const char* filename){
     }
     return false;
 }
+
+void usage(void){
+    cout << "countpcapitems -source source_filename -target target_directory." <<endl;
+    cout << "Count various items in pcap files. The items are counted and the counted results are stored in a target directory" << endl <<endl;
+    cout << "OPTIONS" <<endl <<endl;
+    cout << "--help\t\t-h\tshows this screen"<<endl;
+    cout << "--source\t-s\tSpecify the source filename"<<endl;
+    cout << "--target\t-t\tSpecify the target directory"<<endl;
+    cout << endl;
+    cout << "--ips\t\t\-i\tCount source IP addresses" <<endl;
+}
 int main() {
     const char* filename = "output.bin";
     read_from_stdin(NULL);
