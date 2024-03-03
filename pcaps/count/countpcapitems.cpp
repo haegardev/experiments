@@ -109,8 +109,19 @@ void usage(void){
     cout << endl;
     cout << "--ips\t\t\-i\tCount source IP addresses" <<endl;
 }
-int main() {
+int main(int argc, char* argv[]) {
     const char* filename = "output.bin";
+    int opt;
+    while ((opt = getopt(argc, argv, "hs:t:i:")) != -1) {
+        switch (opt) {
+            case 'h':
+                usage();
+                return EXIT_SUCCESS;
+            default: /* '?' */
+                fprintf(stderr, "[ERROR] Invalid command line was specified\n");
+        }
+    }
+
     read_from_stdin(NULL);
     cout<<"Start to serailize" <<endl;
     store_map(filename);
