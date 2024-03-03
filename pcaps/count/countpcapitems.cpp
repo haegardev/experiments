@@ -29,6 +29,9 @@ public:
     void setTarget(const char* target);
     void setSource(const char* source);
     void read_from_stdin(void);
+    void store_ip_cnt_map(void);
+    void load_ip_cnt_map(const string& filename);
+
     // Attributes
     map <uint32_t, uint32_t> counted_data;
     string source;
@@ -39,7 +42,7 @@ public:
 
 
 
-map <uint32_t, uint32_t> counted_data;
+map <uint32_t, uint32_t> ip_cnt_map;
 
 
 PcapCount::PcapCount(){
@@ -112,7 +115,7 @@ void PcapCount::read_from_stdin(void)
                 // add here the next fields that are parsed
             }
             // Count IP addresses
-            ++counted_data[ip_src];
+            ++ip_cnt_map[ip_src];
             token = strtok(NULL, ",");
             i++;
         }
@@ -125,17 +128,15 @@ void PcapCount::read_from_stdin(void)
  *format: size_t size of the map  followed by series of uint32_t ip uint32_t frequency
  */
 
-bool store_map(const std::string& filename, const std::map<uint32_t, uint32_t>& counted_data) {
-    ofstream file(filename, ios::binary);
+void PcapCount::store_ip_cnt_map(void) {
+    ofstream file(this->target_srcip_file, ios::binary);
     if (file.is_open()) {
         boost::archive::binary_oarchive oa(file);
-        oa << counted_data;
-        cout<<"Serialized map"<<endl;
+        oa << ip_cnt_map;
         file.close();
     } else {
-    cerr << "Error: Unable to open file " << filename << " for writing." << std::endl;
+    cerr << "Error: Unable to open file " << this->target_srcip_file << " for writing." << std::endl;
     }
-    return false;
 }
 
 void PcapCount::usage(void){
@@ -159,13 +160,13 @@ bool check_target(string target)
     return false;
 }
 
-void load_map(const string& filename)
+void PcapCount::load_ip_cnt_map(const string& filename)
 {
 // Load the serialized data
     std::ifstream file(filename, std::ios::binary);
     if (file.is_open()) {
         boost::archive::binary_iarchive ia(file);
-        ia >> counted_data;
+        ia >> ip_cnt_map;
         file.close();
         std::cout << "Data deserialized successfully." << std::endl;
 
@@ -211,6 +212,6 @@ int main(int argc, char* argv[]) {
     }
     pc.read_from_stdin();
     cout<<"Start to serailize" <<endl;
-    store_map(pc.target_srcip_file, counted_data);
+    pc.store_ip_cnt_map();
     return 0;
 }
