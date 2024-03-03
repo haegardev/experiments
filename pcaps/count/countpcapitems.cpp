@@ -19,6 +19,23 @@ using namespace std;
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/serialization/map.hpp>
 #include <filesystem>
+
+
+class PcapCount {
+public:
+    // Constructor
+    PcapCount() {}
+    void usage(void);
+    // Attributes
+    map <uint32_t, uint32_t> counted_data;
+    string source;
+    string target;
+    string target_srcip_file;
+    bool cnt_src_ips;
+};
+
+
+
 map <uint32_t, uint32_t> counted_data;
 
 void read_from_stdin(void)
@@ -100,7 +117,7 @@ bool store_map(const std::string& filename, const std::map<uint32_t, uint32_t>& 
     return false;
 }
 
-void usage(void){
+void PcapCount::usage(void){
     cout << "countpcapitems -source source_filename -target target_directory." <<endl;
     cout << "Count various items in pcap files. The items are counted and the counted results are stored in a target directory" << endl <<endl;
     cout << "OPTIONS" <<endl <<endl;
@@ -148,10 +165,11 @@ int main(int argc, char* argv[]) {
     string target;
     string target_srcip_file;
     bool cnt_src_ips = false;
+    PcapCount pc;
     while ((opt = getopt(argc, argv, "hs:t:i:")) != -1) {
         switch (opt) {
             case 'h':
-                usage();
+                pc.usage();
                 return EXIT_SUCCESS;
             case 'i':
                 cnt_src_ips=true;
