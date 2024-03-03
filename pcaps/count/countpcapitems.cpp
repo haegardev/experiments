@@ -24,7 +24,7 @@ using namespace std;
 class PcapCount {
 public:
     // Constructor
-    PcapCount() {}
+    PcapCount();
     void usage(void);
     // Attributes
     map <uint32_t, uint32_t> counted_data;
@@ -37,6 +37,11 @@ public:
 
 
 map <uint32_t, uint32_t> counted_data;
+
+
+PcapCount::PcapCount(){
+    // Put constructor stuff here
+}
 
 void read_from_stdin(void)
 {
