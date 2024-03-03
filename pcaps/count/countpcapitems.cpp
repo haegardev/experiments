@@ -5,7 +5,7 @@ using namespace std;
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
-#include <getopt.h>
+#include <unistd.h>
 #include <hiredis/hiredis.h>
 #include <stdint.h>
 #include <arpa/inet.h>
@@ -112,15 +112,29 @@ void usage(void){
 int main(int argc, char* argv[]) {
     const char* filename = "output.bin";
     int opt;
+    string source;
+    string target;
+    bool cnt_src_ips = false;
     while ((opt = getopt(argc, argv, "hs:t:i:")) != -1) {
         switch (opt) {
             case 'h':
                 usage();
                 return EXIT_SUCCESS;
+            case 'i':
+                cnt_src_ips=true;
+                break;
+            case 's':
+                source = string(optarg);
+                break;
+            case 't':
+                target = string(optarg);
+                break;
             default: /* '?' */
                 fprintf(stderr, "[ERROR] Invalid command line was specified\n");
         }
     }
+    cout<<"Source " <<source <<endl;
+    cout<<"target " <<target <<endl;
 
     read_from_stdin(NULL);
     cout<<"Start to serailize" <<endl;
