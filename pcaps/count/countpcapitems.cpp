@@ -26,6 +26,8 @@ public:
     // Constructor
     PcapCount();
     void usage(void);
+    void setTarget(const char* target);
+    void setSource(const char* source);
     // Attributes
     map <uint32_t, uint32_t> counted_data;
     string source;
@@ -41,6 +43,19 @@ map <uint32_t, uint32_t> counted_data;
 
 PcapCount::PcapCount(){
     // Put constructor stuff here
+}
+
+void PcapCount::setTarget(const char* tg)
+{
+    this->target=string(tg);
+    this->target_srcip_file = string(tg);
+    this->target_srcip_file.append("/src_ip.cnt");
+    // TODO generate all the other counted fields such as proto, source port, destination port here
+}
+
+void PcapCount::setSource(const char* sr)
+{
+    this->source = string(sr);
 }
 
 void read_from_stdin(void)
@@ -166,9 +181,6 @@ void load_map(const string& filename)
 int main(int argc, char* argv[]) {
     const char* filename = "output.bin";
     int opt;
-    string source;
-    string target;
-    string target_srcip_file;
     bool cnt_src_ips = false;
     PcapCount pc;
     while ((opt = getopt(argc, argv, "hs:t:i:")) != -1) {
@@ -180,25 +192,24 @@ int main(int argc, char* argv[]) {
                 cnt_src_ips=true;
                 break;
             case 's':
-                source = string(optarg);
+                pc.setSource(optarg);
                 break;
             case 't':
-                target = string(optarg);
+                pc.setTarget(optarg);
                 break;
             default: /* '?' */
                 fprintf(stderr, "[ERROR] Invalid command line was specified\n");
         }
     }
-    cout<<"Source " <<source <<endl;
-    cout<<"target " <<target <<endl;
+    cout<<"Source " <<pc.source <<endl;
+    cout<<"Target SRC "<<pc.target_srcip_file << endl;
+    cout<<"Target " <<pc.target <<endl;
 
-    if (check_target(target) == false){
+    if (check_target(pc.target) == false){
         return EXIT_FAILURE;
     }
-    target_srcip_file = target;
-    target_srcip_file.append("/src_ip.cnt");
     read_from_stdin();
     cout<<"Start to serailize" <<endl;
-    store_map(target_srcip_file, counted_data);
+    store_map(pc.target_srcip_file, counted_data);
     return 0;
 }
