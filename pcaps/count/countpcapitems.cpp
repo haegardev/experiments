@@ -124,6 +124,7 @@ int main(int argc, char* argv[]) {
     int opt;
     string source;
     string target;
+    string target_srcip_file;
     bool cnt_src_ips = false;
     while ((opt = getopt(argc, argv, "hs:t:i:")) != -1) {
         switch (opt) {
@@ -149,7 +150,8 @@ int main(int argc, char* argv[]) {
     if (check_target(target) == false){
         return EXIT_FAILURE;
     }
-
+    target_srcip_file = target;
+    target_srcip_file.append("/src_ip.cnt");
     read_from_stdin(NULL);
     cout<<"Start to serailize" <<endl;
     store_map(filename);
