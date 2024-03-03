@@ -28,6 +28,7 @@ public:
     void usage(void);
     void setTarget(const char* target);
     void setSource(const char* source);
+    void read_from_stdin(void);
     // Attributes
     map <uint32_t, uint32_t> counted_data;
     string source;
@@ -58,7 +59,7 @@ void PcapCount::setSource(const char* sr)
     this->source = string(sr);
 }
 
-void read_from_stdin(void)
+void PcapCount::read_from_stdin(void)
 {
     char *buf;
     int i,j;
@@ -208,7 +209,7 @@ int main(int argc, char* argv[]) {
     if (check_target(pc.target) == false){
         return EXIT_FAILURE;
     }
-    read_from_stdin();
+    pc.read_from_stdin();
     cout<<"Start to serailize" <<endl;
     store_map(pc.target_srcip_file, counted_data);
     return 0;
