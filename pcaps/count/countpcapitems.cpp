@@ -146,6 +146,10 @@ int main(int argc, char* argv[]) {
     cout<<"Source " <<source <<endl;
     cout<<"target " <<target <<endl;
 
+    if (check_target(target) == false){
+        return EXIT_FAILURE;
+    }
+
     read_from_stdin(NULL);
     cout<<"Start to serailize" <<endl;
     store_map(filename);
