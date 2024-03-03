@@ -46,6 +46,7 @@ map <uint32_t, uint32_t> ip_cnt_map;
 
 
 PcapCount::PcapCount(){
+    this->cnt_src_ips = false;
     // Put constructor stuff here
 }
 
@@ -115,7 +116,9 @@ void PcapCount::read_from_stdin(void)
                 // add here the next fields that are parsed
             }
             // Count IP addresses
-            ++ip_cnt_map[ip_src];
+            if (this->cnt_src_ips) {
+                ++ip_cnt_map[ip_src];
+            }
             token = strtok(NULL, ",");
             i++;
         }
@@ -181,17 +184,15 @@ void PcapCount::load_ip_cnt_map(const string& filename)
 
 
 int main(int argc, char* argv[]) {
-    const char* filename = "output.bin";
     int opt;
-    bool cnt_src_ips = false;
     PcapCount pc;
-    while ((opt = getopt(argc, argv, "hs:t:i:")) != -1) {
+    while ((opt = getopt(argc, argv, "hs:t:i")) != -1) {
         switch (opt) {
             case 'h':
                 pc.usage();
                 return EXIT_SUCCESS;
             case 'i':
-                cnt_src_ips=true;
+                pc.cnt_src_ips=true;
                 break;
             case 's':
                 pc.setSource(optarg);
