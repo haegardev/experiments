@@ -157,6 +157,7 @@ int main(int argc, char* argv[]) {
     cout<<"Start to serailize" <<endl;
     store_map(target_srcip_file, counted_data);
 
+    counted_data.clear();
     // Load the serialized data
     std::ifstream file(target_srcip_file, std::ios::binary);
     if (file.is_open()) {
