@@ -120,6 +120,27 @@ bool check_target(string target)
     }
     return false;
 }
+
+void load_map(const string& filename)
+{
+// Load the serialized data
+    std::ifstream file(filename, std::ios::binary);
+    if (file.is_open()) {
+        boost::archive::binary_iarchive ia(file);
+        ia >> counted_data;
+        file.close();
+        std::cout << "Data deserialized successfully." << std::endl;
+
+        // Print the deserialized map
+        for (const auto& entry : counted_data) {
+            std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
+        }
+    } else {
+        std::cerr << "Error: Unable to open file " << filename << " for reading." << std::endl;
+    }
+}
+
+
 int main(int argc, char* argv[]) {
     const char* filename = "output.bin";
     int opt;
@@ -156,23 +177,5 @@ int main(int argc, char* argv[]) {
     read_from_stdin();
     cout<<"Start to serailize" <<endl;
     store_map(target_srcip_file, counted_data);
-
-    counted_data.clear();
-    // Load the serialized data
-    std::ifstream file(target_srcip_file, std::ios::binary);
-    if (file.is_open()) {
-        boost::archive::binary_iarchive ia(file);
-        ia >> counted_data;
-        file.close();
-        std::cout << "Data deserialized successfully." << std::endl;
-
-        // Print the deserialized map
-        for (const auto& entry : counted_data) {
-            std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
-        }
-    } else {
-        std::cerr << "Error: Unable to open file " << filename << " for reading." << std::endl;
-        return 1; // Return with an error code
-    }
     return 0;
 }
