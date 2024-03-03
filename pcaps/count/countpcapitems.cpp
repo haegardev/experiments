@@ -18,7 +18,7 @@ using namespace std;
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/serialization/map.hpp>
-
+#include <filesystem>
 map <uint32_t, uint32_t> ip_time_line;
 
 void read_from_stdin(char*filename )
@@ -108,6 +108,16 @@ void usage(void){
     cout << "--target\t-t\tSpecify the target directory"<<endl;
     cout << endl;
     cout << "--ips\t\t\-i\tCount source IP addresses" <<endl;
+}
+
+bool check_target(string target)
+{
+    if (filesystem::exists(target) && filesystem::is_directory(target)) {
+        return true;
+    } else {
+        cerr<< "Target directory does not exists"<<endl;
+    }
+    return false;
 }
 int main(int argc, char* argv[]) {
     const char* filename = "output.bin";
