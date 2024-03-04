@@ -73,12 +73,11 @@ void PcapCount::read_from_stdin(void)
     buf = (char*)calloc(BUFSIZE,1);
     char *token;
     if (!buf) {
-        fprintf(stderr,"ERROR, could not allocate memory, abort");
+        cerr<<"[ERROR] Could not allocate memory, abort"<<endl;
         abort();
     }
 
     while( fgets(buf, BUFSIZE , stdin) ) {
-        //printf("%s",buf);
         i=1;
         token = strtok(buf, ",");
         while(token != NULL)
@@ -201,7 +200,7 @@ int main(int argc, char* argv[]) {
                 pc.setTarget(optarg);
                 break;
             default: /* '?' */
-                fprintf(stderr, "[ERROR] Invalid command line was specified\n");
+                cerr<<"[ERROR] Invalid command line was specified"<<endl;
         }
     }
     cout<<"Source " <<pc.source <<endl;
