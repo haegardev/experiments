@@ -66,7 +66,8 @@ void QueryCount::load_ip_cnt_map(const string& filename)
 void QueryCount::listFilesRecursive(const fs::path& dirPath) {
     for (const auto& entry : fs::recursive_directory_iterator(dirPath)) {
         if (fs::is_regular_file(entry.path())) {
-            std::cout << entry.path().string() << std::endl;
+            this->counted_data.clear();
+            this->load_ip_cnt_map(entry.path().string());
         }
     }
 }
