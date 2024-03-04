@@ -40,11 +40,6 @@ public:
     bool cnt_src_ips;
 };
 
-
-
-map <uint32_t, uint32_t> ip_cnt_map;
-
-
 PcapCount::PcapCount(){
     this->cnt_src_ips = false;
     // Put constructor stuff here
@@ -119,7 +114,7 @@ void PcapCount::read_from_stdin(void)
         }
         // Count IP addresses
         if (this->cnt_src_ips) {
-            ++ip_cnt_map[ip_src];
+            ++this->counted_data[ip_src];
         }
     }
     free(buf);
@@ -134,7 +129,7 @@ void PcapCount::store_ip_cnt_map(void) {
     ofstream file(this->target_srcip_file, ios::binary);
     if (file.is_open()) {
         boost::archive::binary_oarchive oa(file);
-        oa << ip_cnt_map;
+        oa << this->counted_data;
         file.close();
     } else {
     cerr << "Error: Unable to open file " << this->target_srcip_file << " for writing." << std::endl;
@@ -168,7 +163,7 @@ void PcapCount::load_ip_cnt_map(const string& filename)
     std::ifstream file(filename, std::ios::binary);
     if (file.is_open()) {
         boost::archive::binary_iarchive ia(file);
-        ia >> ip_cnt_map;
+        ia >> this->counted_data;
         file.close();
         std::cout << "Data deserialized successfully." << std::endl;
 
