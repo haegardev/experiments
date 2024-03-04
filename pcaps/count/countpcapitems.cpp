@@ -121,7 +121,6 @@ void PcapCount::read_from_stdin(void)
         // Count IP addresses
         if (this->cnt_src_ips) {
             ++ip_cnt_map[ip_src];
-            cout <<  "Increment for IP"<< ip_src << "  "<< ip_cnt_map[ip_src]<<endl;
         }
     }
     free(buf);
