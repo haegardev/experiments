@@ -51,11 +51,11 @@ void QueryCount::load_ip_cnt_map(const string& filename)
         boost::archive::binary_iarchive ia(file);
         ia >> this->counted_data;
         file.close();
-        std::cout << "Data deserialized successfully." << std::endl;
-
-        // Print the deserialized map
+        // Go through the deserialized map
         for (const auto& entry : counted_data) {
-            std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
+            if (entry.first == this->ip) {
+                std::cout << filename <<","<< this->strIPaddress << entry.first << ",Count: " << entry.second << std::endl;
+            }
         }
     } else {
         std::cerr << "Error: Unable to open file " << filename << " for reading." << std::endl;
