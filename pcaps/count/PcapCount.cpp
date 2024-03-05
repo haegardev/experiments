@@ -104,7 +104,7 @@ void PcapCount::usage(void){
     cout << "--source\t-s\tSpecify the source filename"<<endl;
     cout << "--target\t-t\tSpecify the target directory"<<endl;
     cout << endl;
-    cout << "--ips\t\t\-i\tCount source IP addresses" <<endl;
+    cout << "--ips\t\t-i\tCount source IP addresses" <<endl;
 }
 
 bool PcapCount::check_target_dir(string target)
