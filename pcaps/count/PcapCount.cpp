@@ -89,7 +89,7 @@ void PcapCount::store_ip_cnt_map(void) {
     ofstream file(this->target_srcip_file, ios::binary);
     if (file.is_open()) {
         boost::archive::binary_oarchive oa(file);
-        oa << this->counted_data;
+        oa << this;
         file.close();
     } else {
     cerr << "Error: Unable to open file " << this->target_srcip_file << " for writing." << std::endl;
@@ -135,5 +135,11 @@ void PcapCount::load_ip_cnt_map(const string& filename)
         std::cerr << "Error: Unable to open file " << filename << " for reading." << std::endl;
     }
 }
+    template<class Archive>
 
+// Serialization functio
+void PcapCount::serialize(Archive & ar, const unsigned int version) {
+        //Looks like attributes that should be serailized need to be &
+        ar & description & version & source & target & counted_data;
+}
 
