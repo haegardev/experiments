@@ -86,6 +86,9 @@ void PcapCount::read_from_stdin(void)
         if (this->cnt_src_ips) {
             ++this->counted_data[ip_src];
         }
+        // TODO add switches to enable
+        ++this->cnt_proto[proto];
+        //++this->cnt_ip_dst[ip_dst];
     }
     free(buf);
 }
