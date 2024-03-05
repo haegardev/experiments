@@ -11,7 +11,7 @@ EXEC2 = querycount
 
 all: $(EXEC1) $(EXEC2)
 
-$(EXEC1): countpcapitems.o
+$(EXEC1): countpcapitems.o PcapCount.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 $(EXEC2): querycount.o
