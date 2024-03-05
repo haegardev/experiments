@@ -43,6 +43,10 @@ public:
     string description = DESCRIPTION;
     string version = VERSION;
     map <uint32_t, uint32_t> counted_data;
+    //Count IP protocols observed
+    map <uint8_t,uint32_t> cnt_proto;
+    // Count IP destinations observed
+    map <uint32_t, uint32_t> cnt_ip_dst;
     string source;
     string target;
     string target_srcip_file;

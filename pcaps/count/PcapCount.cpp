@@ -88,7 +88,7 @@ void PcapCount::read_from_stdin(void)
         }
         // TODO add switches to enable
         ++this->cnt_proto[proto];
-        //++this->cnt_ip_dst[ip_dst];
+        ++this->cnt_ip_dst[ip_dst];
     }
     free(buf);
 }
@@ -153,6 +153,6 @@ void PcapCount::load_ip_cnt_map(const string& filename)
 // Serialization functio
 void PcapCount::serialize(Archive & ar, const unsigned int version) {
         //Looks like attributes that should be serailized need to be &
-        ar & description & version & source & target & firstSeen & lastSeen & counted_data;
+        ar & description & version & source & target & firstSeen & lastSeen & counted_data & cnt_proto & cnt_ip_dst;
 }
 
