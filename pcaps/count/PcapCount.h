@@ -36,8 +36,15 @@ public:
     void load_ip_cnt_map(const string& filename);
     bool check_target_dir(string target);
 
+    // Serialization function template declaration
     template<class Archive>
-    void serialize(Archive & ar, const unsigned int version);
+    void serialize(Archive &ar, const unsigned int ) {
+        ar & counted_data;
+        ar & source;
+        ar & target;
+        ar & target_srcip_file;
+        ar & cnt_src_ips;
+    }
 
     // Attributes
     string description = DESCRIPTION;
