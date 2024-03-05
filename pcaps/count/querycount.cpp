@@ -17,6 +17,7 @@ using namespace std;
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/serialization/map.hpp>
 #include <filesystem>
+#include "PcapCount.h"
 namespace fs = std::filesystem;
 
 class QueryCount {
@@ -32,6 +33,7 @@ public:
     string strIPaddress;
     uint32_t ip;
     string rootDir;
+    PcapCount pc;
 };
 
 QueryCount::QueryCount(){
@@ -49,9 +51,9 @@ void QueryCount::load_ip_cnt_map(const string& filename)
     std::ifstream file(filename, std::ios::binary);
     if (file.is_open()) {
         boost::archive::binary_iarchive ia(file);
-        ia >> this->counted_data;
+        ia >> this->pc;
         file.close();
-        cout << filename<<","<<this->strIPaddress<<","<<counted_data[this->ip]<<endl;
+        //cout << filename<<","<<this->strIPaddress<<","<<counted_data[this->ip]<<endl;
         // Go through the deserialized map
         //for (const auto& entry : counted_data) {
         //    if (entry.first == this->ip) {
