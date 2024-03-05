@@ -37,6 +37,8 @@ public:
     bool check_target_dir(string target);
 
     // Attributes
+    string description = DESCRIPTION;
+    string version = VERSION;
     map <uint32_t, uint32_t> counted_data;
     string source;
     string target;
