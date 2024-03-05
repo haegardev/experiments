@@ -12,6 +12,8 @@ using namespace std;
 #include <stdint.h>
 #include <arpa/inet.h>
 #define BUFSIZE 1024
+#define VERSION "1.0"
+#define DESCRIPTION "PcapCount File"
 #include <cstring>
 #include <stdint.h>
 #include <cstdlib>
