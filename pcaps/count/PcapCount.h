@@ -47,6 +47,8 @@ public:
     string target;
     string target_srcip_file;
     bool cnt_src_ips;
+    uint32_t firstSeen;
+    uint32_t lastSeen;
 };
 
 
