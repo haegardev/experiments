@@ -3,6 +3,8 @@
 PcapCount::PcapCount(){
     this->cnt_src_ips = false;
     // Put constructor stuff here
+    this->firstSeen = 0xFFFFFFFF;
+    this->lastSeen = 0;
 }
 
 void PcapCount::setTarget(const char* tg)
@@ -43,8 +45,16 @@ void PcapCount::read_from_stdin(void)
                         for (j=0; j<(int)strlen(ptr); ++j){
                             if (ptr[j]=='.'){
                                 ptr[j]=0;
+                                break;
                             }
-                            ts = atoi(ptr);
+                        }
+                        ts = atoi(ptr);
+                        // Record first and last seen
+                        if (ts > this->lastSeen) {
+                            this->lastSeen = ts;
+                        }
+                        if ( ts < this->firstSeen) {
+                            this->firstSeen = ts;
                         }
                     break;
                 case 2:
@@ -140,6 +150,6 @@ void PcapCount::load_ip_cnt_map(const string& filename)
 // Serialization functio
 void PcapCount::serialize(Archive & ar, const unsigned int version) {
         //Looks like attributes that should be serailized need to be &
-        ar & description & version & source & target & counted_data;
+        ar & description & version & source & target & firstSeen & lastSeen & counted_data;
 }
 
