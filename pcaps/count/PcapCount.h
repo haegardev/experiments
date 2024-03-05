@@ -36,6 +36,9 @@ public:
     void load_ip_cnt_map(const string& filename);
     bool check_target_dir(string target);
 
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version);
+
     // Attributes
     string description = DESCRIPTION;
     string version = VERSION;
