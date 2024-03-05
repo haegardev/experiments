@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -std=c++17 -Wall -Wextra
 LDFLAGS = -lboost_serialization
 
-SRCS = countpcapitems.cpp querycount.cpp
+SRCS = countpcapitems.cpp querycount.cpp PcapCount.cpp
 OBJS = $(SRCS:.cpp=.o)
 EXEC1 = countpcapitems
 EXEC2 = querycount
@@ -14,7 +14,7 @@ all: $(EXEC1) $(EXEC2)
 $(EXEC1): countpcapitems.o PcapCount.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-$(EXEC2): querycount.o
+$(EXEC2): querycount.o PcapCount.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 %.o: %.cpp
