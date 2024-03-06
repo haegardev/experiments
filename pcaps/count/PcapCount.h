@@ -12,8 +12,6 @@ using namespace std;
 #include <stdint.h>
 #include <arpa/inet.h>
 #define BUFSIZE 1024
-#define VERSION "1.0"
-#define DESCRIPTION "PcapCount File"
 #include <cstring>
 #include <stdint.h>
 #include <cstdlib>
@@ -23,6 +21,8 @@ using namespace std;
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/serialization/map.hpp>
 #include <filesystem>
+
+#include "PcapCountHeader.h"
 
 class PcapCount {
 public:
@@ -36,30 +36,7 @@ public:
     void load_ip_cnt_map(const string& filename);
     bool check_target_dir(string target);
 
-    // Serialization function template declaration
-    template<class Archive>
-    void serialize(Archive &ar, const unsigned int ) {
-        ar & counted_data;
-        ar & source;
-        ar & target;
-        ar & target_srcip_file;
-        ar & cnt_src_ips;
-    }
-
-    // Attributes
-    string description = DESCRIPTION;
-    string version = VERSION;
-    map <uint32_t, uint32_t> counted_data;
-    //Count IP protocols observed
-    map <uint8_t,uint32_t> cnt_proto;
-    // Count IP destinations observed
-    map <uint32_t, uint32_t> cnt_ip_dst;
-    string source;
-    string target;
-    string target_srcip_file;
-    bool cnt_src_ips;
-    uint32_t firstSeen;
-    uint32_t lastSeen;
+    PcapCountHeader pch;
 };
 
 

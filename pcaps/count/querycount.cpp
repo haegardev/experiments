@@ -29,11 +29,10 @@ public:
     void setIPaddress(const char* addr);
     void listFilesRecursive(const fs::path& dirPath);
     // Attributes
-    map <uint32_t, uint32_t> counted_data;
     string strIPaddress;
     uint32_t ip;
     string rootDir;
-    PcapCount pc;
+    PcapCountHeader pc;
 };
 
 QueryCount::QueryCount(){
@@ -51,14 +50,13 @@ void QueryCount::load_ip_cnt_map(const string& filename)
     std::ifstream file(filename, std::ios::binary);
     if (file.is_open()) {
         boost::archive::binary_iarchive ia(file);
-        ia >> this->pc;
+        ia >> pc;
         file.close();
-        //cout << filename<<","<<this->strIPaddress<<","<<counted_data[this->ip]<<endl;
+        cout << pc.description<<endl;
+        cout << filename<<","<<this->strIPaddress<<","<<pc.counted_data[this->ip]<<endl;
         // Go through the deserialized map
-        //for (const auto& entry : counted_data) {
-        //    if (entry.first == this->ip) {
+        //for (const auto& entry : pc.counted_data) {
         //        std::cout << filename <<","<< this->strIPaddress << entry.first << ",Count: " << entry.second << std::endl;
-        //    }
         //}
     } else {
         std::cerr << "Error: Unable to open file " << filename << " for reading." << std::endl;
@@ -69,7 +67,7 @@ void QueryCount::load_ip_cnt_map(const string& filename)
 void QueryCount::listFilesRecursive(const fs::path& dirPath) {
     for (const auto& entry : fs::recursive_directory_iterator(dirPath)) {
         if (fs::is_regular_file(entry.path())) {
-            this->counted_data.clear();
+            pc.counted_data.clear();
             this->load_ip_cnt_map(entry.path().string());
         }
     }

@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
                 pc.usage();
                 return EXIT_SUCCESS;
             case 'i':
-                pc.cnt_src_ips=true;
+                pc.pch.cnt_src_ips=true;
                 break;
             case 's':
                 pc.setSource(optarg);
@@ -28,11 +28,11 @@ int main(int argc, char* argv[]) {
                 cerr<<"[ERROR] Invalid command line was specified"<<endl;
         }
     }
-    cout<<"Source " <<pc.source <<endl;
-    cout<<"Target SRC "<<pc.target_srcip_file << endl;
-    cout<<"Target " <<pc.target <<endl;
+    cout<<"Source " <<pc.pch.source <<endl;
+    cout<<"Target SRC "<<pc.pch.target_srcip_file << endl;
+    cout<<"Target " <<pc.pch.target <<endl;
 
-    if (pc.check_target_dir(pc.target) == false){
+    if (pc.check_target_dir(pc.pch.target) == false){
         return EXIT_FAILURE;
     }
     pc.read_from_stdin();

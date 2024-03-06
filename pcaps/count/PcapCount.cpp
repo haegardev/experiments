@@ -1,23 +1,26 @@
+#include "PcapCountHeader.h"
 #include "PcapCount.h"
 #include <map>
 PcapCount::PcapCount(){
-    this->cnt_src_ips = false;
+    pch.cnt_src_ips = false;
     // Put constructor stuff here
-    this->firstSeen = 0xFFFFFFFF;
-    this->lastSeen = 0;
+    pch.firstSeen = 0xFFFFFFFF;
+    pch.lastSeen = 0;
+    pch.pcapCountVersion = VERSION;
+    pch.description = DESCRIPTION;
 }
 
 void PcapCount::setTarget(const char* tg)
 {
-    this->target=string(tg);
-    this->target_srcip_file = string(tg);
-    this->target_srcip_file.append("/src_ip.cnt");
+    pch.target=string(tg);
+    pch.target_srcip_file = string(tg);
+    pch.target_srcip_file.append("/src_ip.cnt");
     // TODO generate all the other counted fields such as proto, source port, destination port here
 }
 
 void PcapCount::setSource(const char* sr)
 {
-    this->source = string(sr);
+    pch.source = string(sr);
 }
 
 void PcapCount::read_from_stdin(void)
@@ -50,11 +53,11 @@ void PcapCount::read_from_stdin(void)
                         }
                         ts = atoi(ptr);
                         // Record first and last seen
-                        if (ts > this->lastSeen) {
-                            this->lastSeen = ts;
+                        if (ts > pch.lastSeen) {
+                            pch.lastSeen = ts;
                         }
-                        if ( ts < this->firstSeen) {
-                            this->firstSeen = ts;
+                        if ( ts < pch.firstSeen) {
+                            pch.firstSeen = ts;
                         }
                     break;
                 case 2:
@@ -83,12 +86,12 @@ void PcapCount::read_from_stdin(void)
             i++;
         }
         // Count IP addresses
-        if (this->cnt_src_ips) {
-            ++this->counted_data[ip_src];
+        if (pch.cnt_src_ips) {
+            ++pch.counted_data[ip_src];
         }
         // TODO add switches to enable
-        ++this->cnt_proto[proto];
-        ++this->cnt_ip_dst[ip_dst];
+        ++pch.cnt_proto[proto];
+        ++pch.cnt_ip_dst[ip_dst];
     }
     free(buf);
 }
@@ -99,13 +102,13 @@ void PcapCount::read_from_stdin(void)
  */
 
 void PcapCount::store_ip_cnt_map(void) {
-    ofstream file(this->target_srcip_file, ios::binary);
+    ofstream file(pch.target_srcip_file, ios::binary);
     if (file.is_open()) {
         boost::archive::binary_oarchive oa(file);
-        oa << this;
+        oa << pch;
         file.close();
     } else {
-    cerr << "Error: Unable to open file " << this->target_srcip_file << " for writing." << std::endl;
+    cerr << "Error: Unable to open file " << pch.target_srcip_file << " for writing." << std::endl;
     }
 }
 
@@ -136,12 +139,12 @@ void PcapCount::load_ip_cnt_map(const string& filename)
     std::ifstream file(filename, std::ios::binary);
     if (file.is_open()) {
         boost::archive::binary_iarchive ia(file);
-        ia >> this->counted_data;
+        ia >> pch.counted_data;
         file.close();
         std::cout << "Data deserialized successfully." << std::endl;
 
         // Print the deserialized map
-        for (const auto& entry : this->counted_data) {
+        for (const auto& entry : pch.counted_data) {
             std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
         }
     } else {
