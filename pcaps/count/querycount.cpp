@@ -33,6 +33,10 @@ public:
     uint32_t ip;
     string rootDir;
     PcapCountHeader pc;
+    // Various flags for retrieving some data
+    bool flag_ip;
+    bool flag_list;
+    bool flag_metadata;
 };
 
 QueryCount::QueryCount(){
@@ -44,6 +48,7 @@ void QueryCount::usage(void)
     cout << "querycount -r root_directory -d day -i ip_address in dotted decimal notion" <<endl;
 }
 
+
 void QueryCount::load_ip_cnt_map(const string& filename)
 {
 // Load the serialized data
@@ -53,7 +58,9 @@ void QueryCount::load_ip_cnt_map(const string& filename)
         ia >> pc;
         file.close();
         //FIXME check version and description
-        cout << filename<<","<<this->strIPaddress<<","<<pc.cnt_ip_src[this->ip]<<endl;
+        if (this->flag_ip) {
+            cout << filename<<","<<this->strIPaddress<<","<<pc.cnt_ip_src[this->ip]<<endl;
+        }
         // Go through the deserialized map
         //for (const auto& entry : pc.counted_data) {
         //        std::cout << filename <<","<< this->strIPaddress << entry.first << ",Count: " << entry.second << std::endl;
@@ -95,6 +102,7 @@ int main(int argc, char* argv[]) {
             case 'h':
                 return EXIT_SUCCESS;
             case 'i':
+                qc.flag_ip = true;
                 qc.setIPaddress(optarg);
                 break;
             case 'r':
