@@ -14,6 +14,8 @@ public:
      void serialize(Archive &ar, const unsigned int ) {
         ar & description;
         ar & pcapCountVersion;
+        ar & firstSeen;
+        ar & lastSeen;
         ar & source;
         ar & target;
         ar & target_srcip_file;

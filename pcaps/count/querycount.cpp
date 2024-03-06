@@ -28,11 +28,13 @@ public:
     void load_ip_cnt_map(const string& filename);
     void setIPaddress(const char* addr);
     void listFilesRecursive(const fs::path& dirPath);
+    void printMetaData(const string &filename);
     // Attributes
     string strIPaddress;
     uint32_t ip;
     string rootDir;
-    PcapCountHeader pc;
+    PcapCountHeader pch;
+    PcapCount pc;
     // Various flags for retrieving some data
     bool flag_ip;
     bool flag_list;
@@ -49,17 +51,33 @@ void QueryCount::usage(void)
 }
 
 
+void QueryCount::printMetaData(const string& filename)
+{
+     cout << "Metadata of the archive: "<< filename << endl;
+     cout << "Description: " << pch.description <<endl;
+     cout << "Version: " << pch.pcapCountVersion << endl;
+     cout << "Included maps listed below" <<endl;
+     cout << "Oldest IP address: "<<pch.firstSeen <<endl;
+     cout << "Newest IP address: "<<pch.lastSeen <<endl;
+     for (const auto& flag : this->pc.getFlagsText(this->pch)) {
+        cout << flag << std::endl;
+    }
+}
+
 void QueryCount::load_ip_cnt_map(const string& filename)
 {
 // Load the serialized data
     std::ifstream file(filename, std::ios::binary);
     if (file.is_open()) {
         boost::archive::binary_iarchive ia(file);
-        ia >> pc;
+        ia >> pch;
         file.close();
         //FIXME check version and description
         if (this->flag_ip) {
-            cout << filename<<","<<this->strIPaddress<<","<<pc.cnt_ip_src[this->ip]<<endl;
+            cout << filename<<","<<this->strIPaddress<<","<<pch.cnt_ip_src[this->ip]<<endl;
+        }
+        if (this->flag_metadata){
+            this->printMetaData(filename);
         }
         // Go through the deserialized map
         //for (const auto& entry : pc.counted_data) {
@@ -97,7 +115,7 @@ int main(int argc, char* argv[]) {
     std::string directoryPath = "";
     int opt;
     QueryCount qc;
-    while ((opt = getopt(argc, argv, "hi:r:")) != -1) {
+    while ((opt = getopt(argc, argv, "mhi:r:")) != -1) {
         switch (opt) {
             case 'h':
                 return EXIT_SUCCESS;
@@ -107,6 +125,9 @@ int main(int argc, char* argv[]) {
                 break;
             case 'r':
                 qc.rootDir = string(optarg);
+                break;
+            case 'm':
+                qc.flag_metadata = true;
                 break;
             default: /* '?' */
                 fprintf(stderr, "[ERROR] Invalid command line was specified\n");

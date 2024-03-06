@@ -16,6 +16,7 @@ using namespace std;
 #include <stdint.h>
 #include <cstdlib>
 #include <map>
+#include <vector>
 #include <fstream>
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
@@ -35,6 +36,7 @@ public:
     void store_ip_cnt_map(void);
     void load_ip_cnt_map(const string& filename);
     bool check_target_dir(string target);
+    vector<string> getFlagsText(PcapCountHeader pch);
 
     PcapCountHeader pch;
 };
