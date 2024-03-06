@@ -19,6 +19,8 @@ public:
         ar & target_srcip_file;
         ar & flag_src_ips;
         ar & cnt_ip_src;
+        ar & cnt_ip_dst;
+        ar & cnt_proto;
     }
 
     // Attributes
