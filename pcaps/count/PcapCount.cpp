@@ -2,7 +2,7 @@
 #include "PcapCount.h"
 #include <map>
 PcapCount::PcapCount(){
-    pch.cnt_src_ips = false;
+    pch.flag_src_ips = false;
     // Put constructor stuff here
     pch.firstSeen = 0xFFFFFFFF;
     pch.lastSeen = 0;
@@ -86,7 +86,7 @@ void PcapCount::read_from_stdin(void)
             i++;
         }
         // Count IP addresses
-        if (pch.cnt_src_ips) {
+        if (pch.flag_src_ips) {
             ++pch.counted_data[ip_src];
         }
         // TODO add switches to enable

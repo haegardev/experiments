@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
                 pc.usage();
                 return EXIT_SUCCESS;
             case 'i':
-                pc.pch.cnt_src_ips=true;
+                pc.pch.flag_src_ips=true;
                 break;
             case 's':
                 pc.setSource(optarg);
