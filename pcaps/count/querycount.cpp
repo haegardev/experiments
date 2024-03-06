@@ -52,7 +52,7 @@ void QueryCount::load_ip_cnt_map(const string& filename)
         boost::archive::binary_iarchive ia(file);
         ia >> pc;
         file.close();
-        cout << pc.description<<endl;
+        //FIXME check version and description
         cout << filename<<","<<this->strIPaddress<<","<<pc.counted_data[this->ip]<<endl;
         // Go through the deserialized map
         //for (const auto& entry : pc.counted_data) {
