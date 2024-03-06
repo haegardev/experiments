@@ -70,9 +70,12 @@ void QueryCount::printMetaData(const string& filename)
      cout << "Metadata of the archive: "<< filename << endl;
      cout << "Description: " << pch.description <<endl;
      cout << "Version: " << pch.pcapCountVersion << endl;
-     cout << "Included maps listed below" <<endl;
+     cout << "Source: " <<pch.source <<endl;
+     cout << "Target: " <<pch.target <<endl;
+     cout << "Target file: " <<pch.target_srcip_file << endl;
      cout << "Oldest IP address: "<<pch.firstSeen << " (" <<this->epochToDateTimeString(pch.firstSeen)<<") (UTC)"<<endl;
      cout << "Newest IP address: "<<pch.lastSeen << " (" <<this->epochToDateTimeString(pch.lastSeen)<<") (UTC)"<<endl;
+     cout << "Included maps listed below" <<endl;
      for (const auto& flag : this->pc.getFlagsText(this->pch)) {
         cout << flag << std::endl;
     }
