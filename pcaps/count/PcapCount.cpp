@@ -154,4 +154,19 @@ void PcapCount::load_ip_cnt_map(const string& filename)
         std::cerr << "Error: Unable to open file " << filename << " for reading." << std::endl;
     }
 }
+// Returns a vector with textual representations with maps found in the serialized data
+vector<string> PcapCount::getFlagsText(PcapCountHeader pch)
+{
+    vector<string> out;
+    if (pch.flag_src_ips) {
+        out.push_back("ip_src");
+    }
+    if (pch.flag_ip_dst) {
+        out.push_back("ip_dst");
+    }
+    if (pch.flag_proto) {
+        out.push_back("proto");
+    }
+    return out;
+}
 
