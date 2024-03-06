@@ -41,6 +41,7 @@ public:
     bool flag_ip;
     bool flag_list;
     bool flag_metadata;
+    void setListOption(const char* optarg);
 };
 
 QueryCount::QueryCount(){
@@ -81,6 +82,26 @@ void QueryCount::printMetaData(const string& filename)
     }
 }
 
+void QueryCount::setListOption(const char* optarg)
+{
+    string option(optarg);
+    if (option == "ip_src") {
+        cout << "Need to list ip_src" <<endl;
+        return;
+    }
+
+    if (option == "ip_dst") {
+        cout << "Need to list ip_dst" <<endl;
+        return;
+    }
+
+    if (option == "proto") {
+        cout << "Need to list proto" <<endl;
+        return;
+    }
+
+    cerr<<"Invalid option specified to list maps" <<endl;
+}
 void QueryCount::load_ip_cnt_map(const string& filename)
 {
 // Load the serialized data
@@ -132,7 +153,7 @@ int main(int argc, char* argv[]) {
     std::string directoryPath = "";
     int opt;
     QueryCount qc;
-    while ((opt = getopt(argc, argv, "mhi:r:")) != -1) {
+    while ((opt = getopt(argc, argv, "l:mhi:r:")) != -1) {
         switch (opt) {
             case 'h':
                 return EXIT_SUCCESS;
@@ -145,6 +166,9 @@ int main(int argc, char* argv[]) {
                 break;
             case 'm':
                 qc.flag_metadata = true;
+                break;
+            case 'l':
+                qc.setListOption(optarg);
                 break;
             default: /* '?' */
                 fprintf(stderr, "[ERROR] Invalid command line was specified\n");
