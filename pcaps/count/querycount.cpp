@@ -17,6 +17,7 @@ using namespace std;
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/serialization/map.hpp>
 #include <filesystem>
+#include <ctime>
 #include "PcapCount.h"
 namespace fs = std::filesystem;
 
@@ -29,6 +30,7 @@ public:
     void setIPaddress(const char* addr);
     void listFilesRecursive(const fs::path& dirPath);
     void printMetaData(const string &filename);
+    string epochToDateTimeString(time_t epochTime);
     // Attributes
     string strIPaddress;
     uint32_t ip;
@@ -50,6 +52,18 @@ void QueryCount::usage(void)
     cout << "querycount -r root_directory -d day -i ip_address in dotted decimal notion" <<endl;
 }
 
+string QueryCount::epochToDateTimeString(time_t epochTime)
+{
+    // Convert epoch time to a tm structure representing local time
+    struct tm *timeInfo = std::gmtime(&epochTime);
+
+    // Format the date-time string
+    char buffer[20]; // Sufficient buffer size for year-month-day hour:minute:second
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeInfo);
+
+    return std::string(buffer);
+}
+
 
 void QueryCount::printMetaData(const string& filename)
 {
@@ -57,8 +71,8 @@ void QueryCount::printMetaData(const string& filename)
      cout << "Description: " << pch.description <<endl;
      cout << "Version: " << pch.pcapCountVersion << endl;
      cout << "Included maps listed below" <<endl;
-     cout << "Oldest IP address: "<<pch.firstSeen <<endl;
-     cout << "Newest IP address: "<<pch.lastSeen <<endl;
+     cout << "Oldest IP address: "<<pch.firstSeen << " (" <<this->epochToDateTimeString(pch.firstSeen)<<") (UTC)"<<endl;
+     cout << "Newest IP address: "<<pch.lastSeen << " (" <<this->epochToDateTimeString(pch.lastSeen)<<") (UTC)"<<endl;
      for (const auto& flag : this->pc.getFlagsText(this->pch)) {
         cout << flag << std::endl;
     }
