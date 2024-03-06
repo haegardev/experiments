@@ -10,7 +10,7 @@ using namespace std;
 int main(int argc, char* argv[]) {
     int opt;
     PcapCount pc;
-    while ((opt = getopt(argc, argv, "hs:t:i")) != -1) {
+    while ((opt = getopt(argc, argv, "hs:t:idp")) != -1) {
         switch (opt) {
             case 'h':
                 pc.usage();
@@ -23,6 +23,12 @@ int main(int argc, char* argv[]) {
                 break;
             case 't':
                 pc.setTarget(optarg);
+                break;
+            case 'd':
+                pc.pch.flag_ip_dst = true;
+                break;
+            case 'p':
+                pc.pch.flag_proto = true;
                 break;
             default: /* '?' */
                 cerr<<"[ERROR] Invalid command line was specified"<<endl;

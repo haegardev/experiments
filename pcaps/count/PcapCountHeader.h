@@ -18,6 +18,8 @@ public:
         ar & target;
         ar & target_srcip_file;
         ar & flag_src_ips;
+        ar & flag_ip_dst;
+        ar & flag_proto;
         ar & cnt_ip_src;
         ar & cnt_ip_dst;
         ar & cnt_proto;
@@ -35,6 +37,8 @@ public:
     string target;
     string target_srcip_file;
     bool flag_src_ips;
+    bool flag_ip_dst;
+    bool flag_proto;
     uint32_t firstSeen;
     uint32_t lastSeen;
 };

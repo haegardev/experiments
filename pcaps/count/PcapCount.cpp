@@ -85,13 +85,16 @@ void PcapCount::read_from_stdin(void)
             token = strtok(NULL, ",");
             i++;
         }
-        // Count IP addresses
+        // Count IP addresses and other fields
         if (pch.flag_src_ips) {
             ++pch.cnt_ip_src[ip_src];
         }
-        // TODO add switches to enable
-        ++pch.cnt_proto[proto];
-        ++pch.cnt_ip_dst[ip_dst];
+        if (pch.flag_ip_dst) {
+            ++pch.cnt_ip_dst[ip_dst];
+        }
+        if (pch.flag_proto) {
+            ++pch.cnt_proto[proto];
+        }
     }
     free(buf);
 }
