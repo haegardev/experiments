@@ -87,7 +87,7 @@ void PcapCount::read_from_stdin(void)
         }
         // Count IP addresses
         if (pch.flag_src_ips) {
-            ++pch.counted_data[ip_src];
+            ++pch.cnt_ip_src[ip_src];
         }
         // TODO add switches to enable
         ++pch.cnt_proto[proto];
@@ -139,12 +139,12 @@ void PcapCount::load_ip_cnt_map(const string& filename)
     std::ifstream file(filename, std::ios::binary);
     if (file.is_open()) {
         boost::archive::binary_iarchive ia(file);
-        ia >> pch.counted_data;
+        ia >> pch.cnt_ip_src;
         file.close();
         std::cout << "Data deserialized successfully." << std::endl;
 
         // Print the deserialized map
-        for (const auto& entry : pch.counted_data) {
+        for (const auto& entry : pch.cnt_ip_src) {
             std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
         }
     } else {

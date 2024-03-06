@@ -53,7 +53,7 @@ void QueryCount::load_ip_cnt_map(const string& filename)
         ia >> pc;
         file.close();
         //FIXME check version and description
-        cout << filename<<","<<this->strIPaddress<<","<<pc.counted_data[this->ip]<<endl;
+        cout << filename<<","<<this->strIPaddress<<","<<pc.cnt_ip_src[this->ip]<<endl;
         // Go through the deserialized map
         //for (const auto& entry : pc.counted_data) {
         //        std::cout << filename <<","<< this->strIPaddress << entry.first << ",Count: " << entry.second << std::endl;
@@ -67,7 +67,6 @@ void QueryCount::load_ip_cnt_map(const string& filename)
 void QueryCount::listFilesRecursive(const fs::path& dirPath) {
     for (const auto& entry : fs::recursive_directory_iterator(dirPath)) {
         if (fs::is_regular_file(entry.path())) {
-            pc.counted_data.clear();
             this->load_ip_cnt_map(entry.path().string());
         }
     }

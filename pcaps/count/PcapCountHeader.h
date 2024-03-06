@@ -18,13 +18,13 @@ public:
         ar & target;
         ar & target_srcip_file;
         ar & flag_src_ips;
-        ar & counted_data;
+        ar & cnt_ip_src;
     }
 
     // Attributes
     string description = DESCRIPTION;
     string pcapCountVersion = VERSION;
-    map <uint32_t, uint32_t> counted_data;
+    map <uint32_t, uint32_t> cnt_ip_src;
     //Count IP protocols observed
     map <uint8_t,uint32_t> cnt_proto;
     // Count IP destinations observed
