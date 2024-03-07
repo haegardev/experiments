@@ -36,6 +36,9 @@ public:
     void store_ip_cnt_map(void);
     void load_ip_cnt_map(const string& filename);
     bool check_target_dir(string target);
+    map <uint32_t, uint32_t> sumData;
+    void sumMap(const map <uint32_t, uint32_t> &map);
+
     vector<string> getFlagsText(PcapCountHeader pch);
     vector<pair<uint32_t, uint32_t>> sortSourceIPsbyOccurence(const PcapCountHeader& pch);
     vector<pair<uint32_t, uint32_t>> sortDestinationIPsbyOccurence(const PcapCountHeader &pch);

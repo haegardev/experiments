@@ -48,6 +48,7 @@ public:
     bool lflag_ip_src;
     bool lflag_ip_dst;
     bool lflag_proto;
+    bool lflag_sum;
 };
 
 QueryCount::QueryCount(){
@@ -170,7 +171,12 @@ void QueryCount::load_ip_cnt_map(const string& filename)
             this->printMetaData(filename);
         }
         if (lflag_ip_src == true) {
-            this->printSortedSourceIPs();
+            if (lflag_sum == true) {
+                cout <<"[INFO] doing sum of "<<filename <<endl;
+                pc.sumMap(pch.cnt_ip_src);
+            } else {
+                this->printSortedSourceIPs();
+            }
         }
         if (lflag_ip_dst == true) {
             this->printSortedDestinationIPs();
@@ -210,7 +216,7 @@ int main(int argc, char* argv[]) {
     std::string directoryPath = "";
     int opt;
     QueryCount qc;
-    while ((opt = getopt(argc, argv, "l:mhi:r:")) != -1) {
+    while ((opt = getopt(argc, argv, "sl:mhi:r:")) != -1) {
         switch (opt) {
             case 'h':
                 return EXIT_SUCCESS;
@@ -227,6 +233,9 @@ int main(int argc, char* argv[]) {
             case 'l':
                 qc.setListOption(optarg);
                 break;
+            case 's':
+                qc.lflag_sum = true;
+                break;
             default: /* '?' */
                 fprintf(stderr, "[ERROR] Invalid command line was specified\n");
         }
@@ -234,6 +243,16 @@ int main(int argc, char* argv[]) {
 
     // Call the function to list files recursively
     qc.listFilesRecursive(qc.rootDir);
+
+    if (qc.lflag_sum==true) {
+        // Print summed data
+        if (qc.lflag_ip_src) {
+            cout<< "Source IP, Occurence" <<endl;
+       }
+        for (auto it = qc.pc.sumData.begin(); it != qc.pc.sumData.end(); ++it) {
+            std::cout << it->first << "," <<it->second << std::endl;
+        }
+    }
     return 0;
 }
 

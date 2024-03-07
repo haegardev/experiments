@@ -204,4 +204,9 @@ vector<pair<uint32_t, uint32_t>> PcapCount::sortProtosbyOccurence(const PcapCoun
     return out;
 }
 
+void PcapCount::sumMap(const map <uint32_t, uint32_t> &myMap) {
+   for (auto it = myMap.begin(); it != myMap.end(); ++it) {
+        sumData[it->first]+=it->second;
+    }
+}
 
