@@ -136,15 +136,7 @@ void QueryCount::load_ip_cnt_map(const string& filename)
         }
         if (lflag_ip_src == true) {
             this->printSortedSourceIPs();
-        //for (const auto& entry : pch.cnt_ip_src) {
-        //        std::cout << filename <<","<< this->strIPaddress << entry.first << ",Count: " << entry.second << std::endl;
-        //}
-    } else {
-        }
-        // Go through the deserialized map
-        //for (const auto& entry : pc.counted_data) {
-        //        std::cout << filename <<","<< this->strIPaddress << entry.first << ",Count: " << entry.second << std::endl;
-        //}
+    }
     } else {
         std::cerr << "Error: Unable to open file " << filename << " for reading." << std::endl;
     }
