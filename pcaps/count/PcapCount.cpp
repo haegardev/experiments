@@ -210,3 +210,12 @@ void PcapCount::sumMap(const map <uint32_t, uint32_t> &myMap) {
     }
 }
 
+vector<pair<uint32_t, uint32_t>> PcapCount::sortSumedData(void)
+{
+    vector<std::pair<uint32_t, uint32_t>> out(sumData.begin(), sumData.end());
+    // Sort the vector by values (second element of pair)
+    sort(out.begin(), out.end(), [](const auto& lhs, const auto& rhs) {
+    return lhs.second > rhs.second;
+    });
+    return out;
+}

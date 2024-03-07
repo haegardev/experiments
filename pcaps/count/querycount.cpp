@@ -34,6 +34,8 @@ public:
     void printSortedSourceIPs(void);
     void printSortedDestinationIPs(void);
     void printSortedProtos(void);
+    void printSortedSums(void);
+
     // Attributes
     string strIPaddress;
     uint32_t ip;
@@ -212,6 +214,29 @@ void QueryCount::setIPaddress(const char* addr)
    }
 }
 
+void QueryCount::printSortedSums(void)
+{
+    bool isIP=false;
+    struct in_addr addr;
+
+    if (lflag_sum==true) {
+        if (lflag_ip_src) {
+            cout<< "Source IP, Occurence" <<endl;
+            isIP = true;
+       }
+    }
+    // print the sorted data
+    vector<std::pair<uint32_t, uint32_t>> vec = this->pc.sortSumedData();
+    for (const auto& pair : vec) {
+        if (isIP) {
+            addr.s_addr = htonl(pair.first);
+            cout << inet_ntoa(addr) << ","<< pair.second << endl;
+        } else{
+            cout << pair.first << ","<< pair.second << endl;
+        }
+    }
+}
+
 int main(int argc, char* argv[]) {
     std::string directoryPath = "";
     int opt;
@@ -243,15 +268,8 @@ int main(int argc, char* argv[]) {
 
     // Call the function to list files recursively
     qc.listFilesRecursive(qc.rootDir);
-
-    if (qc.lflag_sum==true) {
-        // Print summed data
-        if (qc.lflag_ip_src) {
-            cout<< "Source IP, Occurence" <<endl;
-       }
-        for (auto it = qc.pc.sumData.begin(); it != qc.pc.sumData.end(); ++it) {
-            std::cout << it->first << "," <<it->second << std::endl;
-        }
+    if (qc.lflag_sum){
+        qc.printSortedSums();
     }
     return 0;
 }

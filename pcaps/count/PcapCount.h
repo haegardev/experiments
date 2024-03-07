@@ -43,6 +43,7 @@ public:
     vector<pair<uint32_t, uint32_t>> sortSourceIPsbyOccurence(const PcapCountHeader& pch);
     vector<pair<uint32_t, uint32_t>> sortDestinationIPsbyOccurence(const PcapCountHeader &pch);
     vector<pair<uint32_t, uint32_t>> sortProtosbyOccurence(const PcapCountHeader &pch);
+    vector<pair<uint32_t, uint32_t>> sortSumedData(void);
 
     PcapCountHeader pch;
 };
