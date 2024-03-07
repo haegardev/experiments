@@ -181,7 +181,11 @@ void QueryCount::load_ip_cnt_map(const string& filename)
             }
         }
         if (lflag_ip_dst == true) {
-            this->printSortedDestinationIPs();
+            if (lflag_ip_dst == true) {
+                pc.sumMap(pch.cnt_ip_dst);
+            } else {
+                this->printSortedDestinationIPs();
+            }
         }
         if (lflag_proto == true) {
             this->printSortedProtos();
