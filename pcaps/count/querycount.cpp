@@ -31,6 +31,7 @@ public:
     void listFilesRecursive(const fs::path& dirPath);
     void printMetaData(const string &filename);
     string epochToDateTimeString(time_t epochTime);
+    void printSortedSourceIPs(void);
     // Attributes
     string strIPaddress;
     uint32_t ip;
@@ -42,6 +43,9 @@ public:
     bool flag_list;
     bool flag_metadata;
     void setListOption(const char* optarg);
+    bool lflag_ip_src;
+    bool lflag_ip_dst;
+    bool lflag_proto;
 };
 
 QueryCount::QueryCount(){
@@ -82,20 +86,32 @@ void QueryCount::printMetaData(const string& filename)
     }
 }
 
+void QueryCount::printSortedSourceIPs(void)
+{
+    // Output the sorted vector
+
+    vector<std::pair<uint32_t, uint32_t>> vec = this->pc.sortSourceIPsbyOccurence(pch);
+    cout <<"Source IP address,Occurence"<<endl;
+    for (const auto& pair : vec) {
+        cout << pair.first << ","<< pair.second << std::endl;
+    }
+}
+
 void QueryCount::setListOption(const char* optarg)
 {
     string option(optarg);
     if (option == "ip_src") {
-        cout << "Need to list ip_src" <<endl;
+        this->lflag_ip_src = true;
         return;
     }
 
     if (option == "ip_dst") {
-        cout << "Need to list ip_dst" <<endl;
+        this->lflag_ip_dst = true;
         return;
     }
 
     if (option == "proto") {
+        this->lflag_proto = true;
         cout << "Need to list proto" <<endl;
         return;
     }
@@ -116,6 +132,13 @@ void QueryCount::load_ip_cnt_map(const string& filename)
         }
         if (this->flag_metadata){
             this->printMetaData(filename);
+        }
+        if (lflag_ip_src == true) {
+            this->printSortedSourceIPs();
+        //for (const auto& entry : pch.cnt_ip_src) {
+        //        std::cout << filename <<","<< this->strIPaddress << entry.first << ",Count: " << entry.second << std::endl;
+        //}
+    } else {
         }
         // Go through the deserialized map
         //for (const auto& entry : pc.counted_data) {
