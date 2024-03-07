@@ -88,12 +88,13 @@ void QueryCount::printMetaData(const string& filename)
 
 void QueryCount::printSortedSourceIPs(void)
 {
+    struct in_addr addr;
     // Output the sorted vector
-
     vector<std::pair<uint32_t, uint32_t>> vec = this->pc.sortSourceIPsbyOccurence(pch);
     cout <<"Source IP address,Occurence"<<endl;
     for (const auto& pair : vec) {
-        cout << pair.first << ","<< pair.second << std::endl;
+        addr.s_addr = htonl(pair.first);
+        cout << inet_ntoa(addr) << ","<< pair.second << endl;
     }
 }
 
