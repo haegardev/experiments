@@ -38,6 +38,7 @@ public:
     bool check_target_dir(string target);
     vector<string> getFlagsText(PcapCountHeader pch);
     vector<pair<uint32_t, uint32_t>> sortSourceIPsbyOccurence(const PcapCountHeader& pch);
+    vector<pair<uint32_t, uint32_t>> sortDestinationIPsbyOccurence(const PcapCountHeader &pch);
 
     PcapCountHeader pch;
 };

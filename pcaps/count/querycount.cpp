@@ -32,6 +32,7 @@ public:
     void printMetaData(const string &filename);
     string epochToDateTimeString(time_t epochTime);
     void printSortedSourceIPs(void);
+    void printSortedDestinationIPs(void);
     // Attributes
     string strIPaddress;
     uint32_t ip;
@@ -98,6 +99,18 @@ void QueryCount::printSortedSourceIPs(void)
     }
 }
 
+void QueryCount::printSortedDestinationIPs(void)
+{
+    struct in_addr addr;
+    // Output the sorted vector
+    vector<std::pair<uint32_t, uint32_t>> vec = this->pc.sortDestinationIPsbyOccurence(pch);
+    cout <<"Source IP address,Occurence"<<endl;
+    for (const auto& pair : vec) {
+        addr.s_addr = htonl(pair.first);
+        cout << inet_ntoa(addr) << ","<< pair.second << endl;
+    }
+}
+
 void QueryCount::setListOption(const char* optarg)
 {
     string option(optarg);
@@ -136,7 +149,10 @@ void QueryCount::load_ip_cnt_map(const string& filename)
         }
         if (lflag_ip_src == true) {
             this->printSortedSourceIPs();
-    }
+        }
+        if (lflag_ip_dst == true) {
+            this->printSortedDestinationIPs();
+        }
     } else {
         std::cerr << "Error: Unable to open file " << filename << " for reading." << std::endl;
     }
