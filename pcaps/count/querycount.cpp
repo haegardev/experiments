@@ -114,11 +114,22 @@ void QueryCount::printSortedDestinationIPs(void)
 
 void QueryCount::printSortedProtos(void)
 {
+
+    std::unordered_map<uint8_t, std::string> protocolMap = {
+        {0, "HOPOPT"}, {1, "ICMP"}, {2, "IGMP"}, {3, "GGP"}, {4, "IPv4"},
+        {6, "TCP"}, {8, "EGP"}, {12, "PUP"}, {17, "UDP"}, {20, "HMP"},
+        {22, "XNS-IDP"}, {27, "RDP"}, {29, "ISO-TP4"}, {36, "XTP"}, {37, "DDP"},
+        {41, "IPv6"}, {43, "IPv6-Route"}, {44, "IPv6-Frag"}, {46, "RSVP"}, {47, "GRE"},
+        {50, "ESP"}, {51, "AH"}, {58, "IPv6-ICMP"}, {59, "IPv6-NoNxt"}, {60, "IPv6-Opts"},
+        {89, "OSPF"}, {94, "IPIP"}, {103, "PIM"}, {132, "SCTP"}, {255, "Reserved"}
+    };
+
+
     // Output the sorted vector
     vector<std::pair<uint32_t, uint32_t>> vec = this->pc.sortProtosbyOccurence(pch);
     cout <<"IP protocol,Occurence"<<endl;
     for (const auto& pair : vec) {
-        cout << pair.first << ","<< pair.second << endl;
+        cout << protocolMap[pair.first] << ","<< pair.second << endl;
     }
 }
 
