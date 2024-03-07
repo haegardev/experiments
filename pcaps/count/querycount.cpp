@@ -33,6 +33,7 @@ public:
     string epochToDateTimeString(time_t epochTime);
     void printSortedSourceIPs(void);
     void printSortedDestinationIPs(void);
+    void printSortedProtos(void);
     // Attributes
     string strIPaddress;
     uint32_t ip;
@@ -111,6 +112,17 @@ void QueryCount::printSortedDestinationIPs(void)
     }
 }
 
+void QueryCount::printSortedProtos(void)
+{
+    // Output the sorted vector
+    vector<std::pair<uint32_t, uint32_t>> vec = this->pc.sortProtosbyOccurence(pch);
+    cout <<"IP protocol,Occurence"<<endl;
+    for (const auto& pair : vec) {
+        cout << pair.first << ","<< pair.second << endl;
+    }
+}
+
+
 void QueryCount::setListOption(const char* optarg)
 {
     string option(optarg);
@@ -126,7 +138,6 @@ void QueryCount::setListOption(const char* optarg)
 
     if (option == "proto") {
         this->lflag_proto = true;
-        cout << "Need to list proto" <<endl;
         return;
     }
 
@@ -152,6 +163,9 @@ void QueryCount::load_ip_cnt_map(const string& filename)
         }
         if (lflag_ip_dst == true) {
             this->printSortedDestinationIPs();
+        }
+        if (lflag_proto == true) {
+            this->printSortedProtos();
         }
     } else {
         std::cerr << "Error: Unable to open file " << filename << " for reading." << std::endl;

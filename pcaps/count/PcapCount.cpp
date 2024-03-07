@@ -182,7 +182,7 @@ vector<pair<uint32_t, uint32_t>> PcapCount::sortSourceIPsbyOccurence(const PcapC
     return out;
 }
 
-//Returns a copy of the source ip map sorted by IP with the moist packets
+//Returns a copy of the destination ip map sorted by IP with the moist packets
 vector<pair<uint32_t, uint32_t>> PcapCount::sortDestinationIPsbyOccurence(const PcapCountHeader &pch)
 {
     vector<std::pair<uint32_t, uint32_t>> out(pch.cnt_ip_dst.begin(), pch.cnt_ip_dst.end());
@@ -192,4 +192,16 @@ vector<pair<uint32_t, uint32_t>> PcapCount::sortDestinationIPsbyOccurence(const 
     });
     return out;
 }
+
+//Returns a copy of the proto map sorted by IP with the moist packets
+vector<pair<uint32_t, uint32_t>> PcapCount::sortProtosbyOccurence(const PcapCountHeader &pch)
+{
+    vector<std::pair<uint32_t, uint32_t>> out(pch.cnt_proto.begin(), pch.cnt_proto.end());
+    // Sort the vector by values (second element of pair)
+    sort(out.begin(), out.end(), [](const auto& lhs, const auto& rhs) {
+    return lhs.second > rhs.second;
+    });
+    return out;
+}
+
 

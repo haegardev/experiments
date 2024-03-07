@@ -39,6 +39,7 @@ public:
     vector<string> getFlagsText(PcapCountHeader pch);
     vector<pair<uint32_t, uint32_t>> sortSourceIPsbyOccurence(const PcapCountHeader& pch);
     vector<pair<uint32_t, uint32_t>> sortDestinationIPsbyOccurence(const PcapCountHeader &pch);
+    vector<pair<uint32_t, uint32_t>> sortProtosbyOccurence(const PcapCountHeader &pch);
 
     PcapCountHeader pch;
 };
