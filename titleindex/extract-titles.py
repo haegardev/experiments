@@ -35,4 +35,11 @@ def process_file(inputfile, outputfile):
                                         # Title is a string by the library u is a string
                                         g.write(u.encode('utf-8')+b"|" +  data["Envelope"]["Payload-Metadata"]["HTTP-Response-Metadata"]["HTML-Metadata"]["Head"]["Title"].encode('utf-8') + b"\n")
 
-process_file("CC-MAIN-20240305124045-20240305154045-00875.warc.wat.gz", "toto.txt" )
+
+
+parser = argparse.ArgumentParser(description="Read common crawl WAT files and write html titles with TARGET-URI in the outputfile")
+parser.add_argument("-i", "--input", help="Input file path", required=True)
+parser.add_argument("-o", "--output", help="Output file path", required=True)
+args = parser.parse_args()
+
+process_file(args.input, args.output)
