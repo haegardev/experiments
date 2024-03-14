@@ -9,7 +9,7 @@ from fastwarc.warc import ArchiveIterator, WarcRecordType
 
 def process_file(inputfile, outputfile):
     g = open(outputfile, 'wb')
-    g.write(b'Format: URL|HTML title\n');
+    g.write(b'Format: URL|HTML title (encoding utf-8)\n');
     # GZip:
     stream = GZipStream(open(inputfile, 'rb'))
     #for record in ArchiveIterator(stream, record_types=WarcRecordType.request | WarcRecordType.response):
@@ -32,8 +32,7 @@ def process_file(inputfile, outputfile):
                             if "HTML-Metadata"  in data["Envelope"]["Payload-Metadata"]["HTTP-Response-Metadata"]:
                                 if "Head"  in  data["Envelope"]["Payload-Metadata"]["HTTP-Response-Metadata"]["HTML-Metadata"]:
                                     if "Title"  in  data["Envelope"]["Payload-Metadata"]["HTTP-Response-Metadata"]["HTML-Metadata"]["Head"]:
-                                        sys.stdout.write(u +'|' + data["Envelope"]["Payload-Metadata"]["HTTP-Response-Metadata"]["HTML-Metadata"]["Head"]["Title"]+"\n")
-
-
+                                        # Title is a string by the library u is a string
+                                        g.write(u.encode('utf-8')+b"|" +  data["Envelope"]["Payload-Metadata"]["HTTP-Response-Metadata"]["HTML-Metadata"]["Head"]["Title"].encode('utf-8') + b"\n")
 
 process_file("CC-MAIN-20240305124045-20240305154045-00875.warc.wat.gz", "toto.txt" )
