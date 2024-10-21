@@ -84,6 +84,7 @@ void process_filelist(const string& filelist)
 {
     map<time_t, int> packet_counts;
     ifstream file(filelist);
+    int i = 0;
     string line;
      if (!file.is_open()) {
         cerr << "Could not open the filelist: " << filelist << endl;
@@ -91,9 +92,12 @@ void process_filelist(const string& filelist)
     }
     while (getline(file, line)) {
         if (!line.empty()) {
+            i++;
+            cerr<<"[INFO] Number of files processed "<<i<<"\r";
             readGzipCSV(line,packet_counts);
         }
     }
+    cerr<<endl;
     dump_packet_count(packet_counts);
     file.close();
 }
