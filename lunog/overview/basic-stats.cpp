@@ -28,6 +28,13 @@ class BasicStats {
 
 
         void showHelp(void);
+        void dump_packet_count(void);
+        void readGzipCSV(const string& filename);
+        void process_filelist(const string& filelist);
+
+    private:
+        string getSecondsTimestamp(const string& epoch_timestamp);
+        time_t deriveDay(const string &epoch_seconds);
 };
 
 
@@ -41,7 +48,7 @@ BasicStats::BasicStats()
     this->flag_quiet = false;
 }
 
-string getSecondsTimestamp(const string& epoch_timestamp) {
+string BasicStats::getSecondsTimestamp(const string& epoch_timestamp) {
     // Find the position of the dot (.)
     size_t dot_position = epoch_timestamp.find('.');
     if (dot_position != string::npos) {
@@ -52,7 +59,7 @@ string getSecondsTimestamp(const string& epoch_timestamp) {
 }
 
 
-time_t deriveDay(const string &epoch_seconds)
+time_t BasicStats::deriveDay(const string &epoch_seconds)
 {
     time_t epoch_time = stol(epoch_seconds);
     struct tm* time_info = localtime(&epoch_time);
@@ -62,7 +69,7 @@ time_t deriveDay(const string &epoch_seconds)
     return mktime(time_info);
 }
 // Function to read a gzip-compressed CSV file and store records
-void readGzipCSV(const string& filename, map<time_t, int>& packet_counts) {
+void BasicStats::readGzipCSV(const string& filename) {
     io::filtering_istream in;
     string line;
     string seconds_timestamp;
@@ -85,7 +92,7 @@ void readGzipCSV(const string& filename, map<time_t, int>& packet_counts) {
         if (!line.empty()) {
             //cout << line <<endl;
 		    seconds_timestamp =  getSecondsTimestamp(line);
-    		packet_counts[deriveDay(seconds_timestamp)]++;
+    		this->packet_counts[deriveDay(seconds_timestamp)]++;
         }
     }
 
@@ -104,19 +111,18 @@ void BasicStats::showHelp(void) {
 
 }
 
-void dump_packet_count(const map <time_t, int>  &packet_counts)
+void BasicStats::dump_packet_count(void)
 {
        char buffer[80];
-       for (const auto& entry : packet_counts) {
+       for (const auto& entry : this->packet_counts) {
            tm* time_info = localtime(&entry.first);
            strftime(buffer, sizeof(buffer), "%Y-%m-%d", time_info);
            cout << buffer<< " " << entry.second << endl;
         }
 }
 
-void process_filelist(const string& filelist)
+void BasicStats::process_filelist(const string& filelist)
 {
-    map<time_t, int> packet_counts;
     ifstream file(filelist);
     int i = 0;
     string line;
@@ -128,11 +134,11 @@ void process_filelist(const string& filelist)
         if (!line.empty()) {
             i++;
             cerr<<"[INFO] Number of files processed "<<i<<"\r";
-            readGzipCSV(line,packet_counts);
+            this->readGzipCSV(line);
         }
     }
     cerr<<endl;
-    dump_packet_count(packet_counts);
+    this->dump_packet_count();
     file.close();
 }
 
@@ -172,6 +178,6 @@ int main(int argc, char* argv[]){
         cerr << "Filelist must be specified: " << endl;
         return 1;
     }
-    process_filelist(filelist);
+    bs.process_filelist(filelist);
 	return 0;
 }
