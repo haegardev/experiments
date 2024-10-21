@@ -26,7 +26,7 @@ string getSecondsTimestamp(const string& epoch_timestamp) {
 time_t deriveDay(const string &epoch_seconds)
 {
     time_t epoch_time = stol(epoch_seconds);
-    struct tm* time_info = gmtime(&epoch_time);
+    struct tm* time_info = localtime(&epoch_time);
     time_info->tm_hour = 0;
     time_info->tm_min = 0;
     time_info->tm_sec = 0;
@@ -72,8 +72,11 @@ void showHelp(void) {
 
 void dump_packet_count(const map <time_t, int>  &packet_counts)
 {
+       char buffer[80];
        for (const auto& entry : packet_counts) {
-            cout << "epoch " << entry.first << " -> Packet Count: " << entry.second << endl;
+           tm* time_info = localtime(&entry.first);
+           strftime(buffer, sizeof(buffer), "%Y-%m-%d", time_info);
+           cout << buffer<< " " << entry.second << endl;
         }
 }
 
@@ -88,7 +91,6 @@ void process_filelist(const string& filelist)
     }
     while (getline(file, line)) {
         if (!line.empty()) {
-            cout<<line<<endl;
             readGzipCSV(line,packet_counts);
         }
     }
