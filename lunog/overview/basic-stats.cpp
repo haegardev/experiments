@@ -8,6 +8,7 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/device/file.hpp>
+#include <stdint.h>
 
 using namespace std;
 namespace io = boost::iostreams;
@@ -25,7 +26,7 @@ class BasicStats {
         bool flag_quiet;
         // Counting datastructures
         map<time_t, int> packet_counts;
-
+        map<uint32_t, int> src_ips_counts;
 
         void showHelp(void);
         void dump_packet_count(void);
@@ -86,6 +87,10 @@ void BasicStats::readGzipCSV(const string& filename) {
     io::filtering_istream in;
     string line;
     string seconds_timestamp;
+    stringstream ss;
+    double ts;
+    string str_src_ip;
+
     // Open the file and decompress on-the-fly
     io::file_source file_source(filename);
         if (!file_source.is_open()) {
@@ -103,9 +108,13 @@ void BasicStats::readGzipCSV(const string& filename) {
     // Read file line by line
     while (getline(in, line)) {
         if (!line.empty()) {
+            ss = stringstream(line);
+            ss>>ts;//Skip timestamp
+            ss>>str_src_ip; // Read src ip;
             //cout << line <<endl;
 		    seconds_timestamp =  getSecondsTimestamp(line);
     		this->packet_counts[deriveDay(seconds_timestamp)]++;
+            ss.clear();
         }
     }
 
