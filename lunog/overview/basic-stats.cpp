@@ -63,9 +63,22 @@ time_t BasicStats::deriveDay(const string &epoch_seconds)
 {
     time_t epoch_time = stol(epoch_seconds);
     struct tm* time_info = localtime(&epoch_time);
-    time_info->tm_hour = 0;
-    time_info->tm_min = 0;
-    time_info->tm_sec = 0;
+    if (this->flag_day) {
+        time_info->tm_hour = 0;
+        time_info->tm_min = 0;
+        time_info->tm_sec = 0;
+    }
+
+
+    if (this->flag_hour){
+        time_info->tm_min = 0;
+        time_info->tm_sec = 0;
+    }
+
+    if (this->flag_minute){
+        time_info->tm_sec = 0;
+    }
+    // Default group them by seconds
     return mktime(time_info);
 }
 // Function to read a gzip-compressed CSV file and store records
@@ -116,7 +129,21 @@ void BasicStats::dump_packet_count(void)
        char buffer[80];
        for (const auto& entry : this->packet_counts) {
            tm* time_info = localtime(&entry.first);
-           strftime(buffer, sizeof(buffer), "%Y-%m-%d", time_info);
+
+           // Default grouping is by second
+           strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", time_info);
+
+           if (flag_day) {
+               strftime(buffer, sizeof(buffer), "%Y-%m-%d", time_info);
+           }
+
+           if (flag_hour) {
+               strftime(buffer, sizeof(buffer), "%Y-%m-%d %H", time_info);
+           }
+
+           if (flag_hour) {
+               strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M", time_info);
+           }
            cout << buffer<< " " << entry.second << endl;
         }
 }
@@ -153,16 +180,28 @@ int main(int argc, char* argv[]){
     BasicStats bs;
 
     // Command line option parsing using getopt
-    while ((opt = getopt(argc, argv, "qh:l:")) != -1) {
+    while ((opt = getopt(argc, argv, "msudqhl:")) != -1) {
         switch (opt) {
-            case 'h':  // Help
-                bs.flag_help = optarg;
+            case 'u':  // Help
+                bs.flag_help = true;
                 break;
             case 'l':  // filelist
                 filelist = optarg;
                 break;
             case 'q':
                 bs.flag_quiet = true;
+                break;
+            case 'd':
+                bs.flag_day = true;
+                break;
+            case 'h':
+                bs.flag_hour = true;
+                break;
+            case 'm':
+                bs.flag_minute = true;
+                break;
+            case 's':
+                bs.flag_second = true;
                 break;
             default:   // If an unknown option is provided
                 cerr << "Unknown option: " << optopt << endl;
