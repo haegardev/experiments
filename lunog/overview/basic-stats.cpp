@@ -63,11 +63,16 @@ void readGzipCSV(const string& filename, map<time_t, int>& packet_counts) {
 }
 
 void showHelp(void) {
-    cout << "Usage: basic-stats" << " [options]\n";
+    cout << "Usage: basic-stats" << " [options]"<<endl;
     cout << "Options:\n";
-    cout << "  -h           Show this help message\n";
-    cout << "  -l filelist  Specify a list of files\n";
-    cout << "  -f filename  Specify a single file\n";
+    cout << "  -u           Show this help message"<<endl;
+    cout << "  -l filelist  Specify a list of files"<<endl;
+    cout << "  -f filename  Specify a single file"<<endl;
+    cout << "  -h           Count packets per hour"<<endl;
+    cout << "  -s           Count packets per second"<<endl;
+    cout << "  -m           Count packets per minutes"<<endl;
+    cout << "  -d           Count packets per day"<<endl;
+
 }
 
 void dump_packet_count(const map <time_t, int>  &packet_counts)
