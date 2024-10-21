@@ -25,6 +25,9 @@ class BasicStats {
         bool flag_quiet;
         // Counting datastructures
         map<time_t, int> packet_counts;
+
+
+        void showHelp(void);
 };
 
 
@@ -88,7 +91,7 @@ void readGzipCSV(const string& filename, map<time_t, int>& packet_counts) {
 
 }
 
-void showHelp(void) {
+void BasicStats::showHelp(void) {
     cout << "Usage: basic-stats" << " [options]"<<endl;
     cout << "Options:\n";
     cout << "  -u           Show this help message"<<endl;
@@ -152,14 +155,14 @@ int main(int argc, char* argv[]){
                 break;
             default:   // If an unknown option is provided
                 cerr << "Unknown option: " << optopt << endl;
-                showHelp();
+                bs.showHelp();
                 return 1;
         }
     }
 
     // Show help if -h was provided
     if (bs.flag_help) {
-        showHelp();
+        bs.showHelp();
         return 0;
     }
 
