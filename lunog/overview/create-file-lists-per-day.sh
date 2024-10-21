@@ -1,20 +1,19 @@
 #!/bin/bash
 SOURCE=$1
-TARGET=$2
+OUT=$2
 
 if [ -z "$SOURCE" ]; then
     echo "A source with the tshark output must be there"
     exit 1
 fi
 
-if [ -z "$TARGET" ]; then
+if [ -z "$OUT" ]; then
     echo "A directory where the filelist should be generated must be specified"
     exit 1
 fi
 
 
 FILELIST=`mktemp`
-OUT="output"
 mkdir -p $OUT
 
 find $SOURCE -type f | sort >$FILELIST
