@@ -12,6 +12,32 @@
 using namespace std;
 namespace io = boost::iostreams;
 
+
+class BasicStats {
+    public:
+        BasicStats(void);
+        // Command line parsing flags
+        bool flag_help;
+        bool flag_day;
+        bool flag_hour;
+        bool flag_minute;
+        bool flag_second;
+        bool flag_quiet;
+        // Counting datastructures
+        map<time_t, int> packet_counts;
+};
+
+
+BasicStats::BasicStats()
+{
+    this->flag_help = false;
+    this->flag_day = false;
+    this->flag_hour = false;
+    this->flag_minute = false;
+    this->flag_second = false;
+    this->flag_quiet = false;
+}
+
 string getSecondsTimestamp(const string& epoch_timestamp) {
     // Find the position of the dot (.)
     size_t dot_position = epoch_timestamp.find('.');
@@ -114,6 +140,7 @@ int main(int argc, char* argv[]){
     int opt=-1;
     string filelist;
     bool helpFlag=false;
+    BasicStats bs;
 
     // Command line option parsing using getopt
     while ((opt = getopt(argc, argv, "h:l:")) != -1) {
