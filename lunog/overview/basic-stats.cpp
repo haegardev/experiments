@@ -9,6 +9,7 @@
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/device/file.hpp>
 #include <stdint.h>
+#include <arpa/inet.h>
 
 using namespace std;
 namespace io = boost::iostreams;
@@ -89,7 +90,9 @@ void BasicStats::readGzipCSV(const string& filename) {
     string seconds_timestamp;
     stringstream ss;
     double ts;
+    struct in_addr addr;
     string str_src_ip;
+    uint32_t ip;
 
     // Open the file and decompress on-the-fly
     io::file_source file_source(filename);
@@ -111,6 +114,14 @@ void BasicStats::readGzipCSV(const string& filename) {
             ss = stringstream(line);
             ss>>ts;//Skip timestamp
             ss>>str_src_ip; // Read src ip;
+            // Use IP as integer to save space
+            if (inet_pton(AF_INET, str_src_ip.c_str(), &addr) > 0){
+                ip  = ntohl(addr.s_addr);
+                // FIXME  data structure does not match need timestamp as key
+                this->src_ips_counts[ip]++;
+            } else {
+                cerr<<"[ERROR] got invalid ip address "<<str_src_ip<<endl;
+            }
             //cout << line <<endl;
 		    seconds_timestamp =  getSecondsTimestamp(line);
     		this->packet_counts[deriveDay(seconds_timestamp)]++;
@@ -153,7 +164,7 @@ void BasicStats::dump_packet_count(void)
            if (flag_hour) {
                strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M", time_info);
            }
-           cout << buffer<< " " << entry.second << endl;
+           cout << buffer<< " " << entry.second << " "<<endl;
         }
 }
 
