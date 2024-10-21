@@ -70,7 +70,12 @@ void showHelp(void) {
     cout << "  -f filename  Specify a single file\n";
 }
 
-
+void dump_packet_count(const map <time_t, int>  &packet_counts)
+{
+       for (const auto& entry : packet_counts) {
+            cout << "epoch " << entry.first << " -> Packet Count: " << entry.second << endl;
+        }
+}
 
 void process_filelist(const string& filelist)
 {
@@ -87,14 +92,11 @@ void process_filelist(const string& filelist)
             readGzipCSV(line,packet_counts);
         }
     }
-
+    dump_packet_count(packet_counts);
     file.close();
-
-
-    for (const auto& entry : packet_counts) {
-            cout << "epoch " << entry.first << " -> Packet Count: " << entry.second << endl;
-        }
 }
+
+
 
 
 int main(int argc, char* argv[]){
