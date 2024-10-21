@@ -139,14 +139,13 @@ void process_filelist(const string& filelist)
 int main(int argc, char* argv[]){
     int opt=-1;
     string filelist;
-    bool helpFlag=false;
     BasicStats bs;
 
     // Command line option parsing using getopt
     while ((opt = getopt(argc, argv, "h:l:")) != -1) {
         switch (opt) {
             case 'h':  // Help
-                helpFlag = true;
+                bs.flag_help = optarg;
                 break;
             case 'l':  // filelist
                 filelist = optarg;
@@ -159,7 +158,7 @@ int main(int argc, char* argv[]){
     }
 
     // Show help if -h was provided
-    if (helpFlag) {
+    if (bs.flag_help) {
         showHelp();
         return 0;
     }
