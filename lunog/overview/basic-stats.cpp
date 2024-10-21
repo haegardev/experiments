@@ -108,7 +108,7 @@ void BasicStats::showHelp(void) {
     cout << "  -s           Count packets per second"<<endl;
     cout << "  -m           Count packets per minutes"<<endl;
     cout << "  -d           Count packets per day"<<endl;
-
+    cout << "  -q           Do not show progress messages" <<endl;
 }
 
 void BasicStats::dump_packet_count(void)
@@ -133,7 +133,9 @@ void BasicStats::process_filelist(const string& filelist)
     while (getline(file, line)) {
         if (!line.empty()) {
             i++;
-            cerr<<"[INFO] Number of files processed "<<i<<"\r";
+            if (!this->flag_quiet) {
+                cerr<<"[INFO] Number of files processed "<<i<<"\r";
+            }
             this->readGzipCSV(line);
         }
     }
@@ -151,13 +153,16 @@ int main(int argc, char* argv[]){
     BasicStats bs;
 
     // Command line option parsing using getopt
-    while ((opt = getopt(argc, argv, "h:l:")) != -1) {
+    while ((opt = getopt(argc, argv, "qh:l:")) != -1) {
         switch (opt) {
             case 'h':  // Help
                 bs.flag_help = optarg;
                 break;
             case 'l':  // filelist
                 filelist = optarg;
+                break;
+            case 'q':
+                bs.flag_quiet = true;
                 break;
             default:   // If an unknown option is provided
                 cerr << "Unknown option: " << optopt << endl;
