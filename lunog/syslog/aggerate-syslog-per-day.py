@@ -54,7 +54,7 @@ unique_ip_counts = {date: len(ips) for date, ips in unique_ips_per_day.items()}
 # Print the unique IP counts per day
 #pprint.pprint(aggregated_word_counts)
 
-print("Unique Syslog Source IPs per Day:")
+#print("Unique Syslog Source IPs per Day:")
 for date, count in sorted(unique_ip_counts.items()):
     buf = []
     # Print the aggregated word counts
@@ -63,5 +63,5 @@ for date, count in sorted(unique_ip_counts.items()):
             #buf.append(word+":"+str(count))
             buf.append((word,count))
     s = json.dumps(buf)
-    print(f"{date}: {count} {s}" )
+    print(f"{date} {count} {s}" )
 
