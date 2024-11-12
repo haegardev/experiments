@@ -4,10 +4,17 @@ import pprint
 import json
 import os
 import re
+import argparse
+
+
+
 from collections import defaultdict, Counter
 
-# Directory containing your JSON files
-json_directory = 'tmp2/01/'
+# Set up argparse to take filename as a command-line argument
+parser = argparse.ArgumentParser(description="Parse network data and extract information block by block.")
+parser.add_argument("--directory", type=str, help="The directory containing the json files with syslog data")
+args = parser.parse_args()
+
 
 # Dictionary to store unique IPs per day and aggregated word counts
 unique_ips_per_day = defaultdict(set)
@@ -26,9 +33,9 @@ def identify_non_number(s):
 
 
 # Process each JSON file
-for filename in os.listdir(json_directory):
+for filename in os.listdir(args.directory):
     if filename.endswith(".json"):
-        file_path = os.path.join(json_directory, filename)
+        file_path = os.path.join(args.directory, filename)
         #print(f"Processing file: {file_path}")
         with open(file_path, 'r') as json_file:
             data = json.load(json_file)  # Load the JSON data
@@ -55,8 +62,6 @@ for date, count in sorted(unique_ip_counts.items()):
         if identify_non_number(word):
             #buf.append(word+":"+str(count))
             buf.append((word,count))
-    #s = ";".join(buf)
     s = json.dumps(buf)
     print(f"{date}: {count} {s}" )
-    
 
