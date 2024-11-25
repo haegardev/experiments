@@ -13,11 +13,19 @@ def process_record(record):
     warc_block_digest = record.headers.get("WARC-Block-Digest", "N/A")
     warc_payload_type = record.headers.get("WARC-Identified-Payload-Type", "N/A")
 
-    pprint.pprint(record.headers)
-    print("=== WARC Header Fields ===")
-    print(f"WARC-Payload-Digest: {warc_payload_digest}")
-    print(f"WARC-Block-Digest: {warc_block_digest}")
-    print(f"WARC-Identified-Payload-Type: {warc_payload_type}")
+    #pprint.pprint(record.headers)
+
+    if (record.headers.get("WARC-Type") == 'request'):
+        target_ip=record.headers.get("WARC-IP-Address")
+        target_uri = record.headers.get("WARC-Target-URI")
+        warc_date = record.headers.get("WARC-Date")
+        print (f"{warc_date},{target_ip},{target_uri}")
+
+    #print("=== WARC Header Fields ===")
+
+    #print(f"WARC-Payload-Digest: {warc_payload_digest}")
+    #print(f"WARC-Block-Digest: {warc_block_digest}")
+    #print(f"WARC-Identified-Payload-Type: {warc_payload_type}")
 
     # Get payload if it exists
     #payload = record.payload.read().decode("utf-8", errors="ignore") if record.payload else ""
@@ -37,7 +45,7 @@ def read_warc(file_path):
     """
     with open(file_path, "rb") as warc_file:
         for record in ArchiveIterator(warc_file):
-            print("\n=== New WARC Record ===")
+            #print("\n=== New WARC Record ===")
             process_record(record)
 
 if __name__ == "__main__":
