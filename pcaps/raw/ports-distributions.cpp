@@ -21,7 +21,7 @@ void printConnectionStats() {
         //std::cout << "Source IP: " << srcIP << " "<< inet_ntoa(srcIP) << std::endl;
         std::cout << "Source IP: " << srcIP << " "<< srcIP << std::endl;
         for (const auto &portCount : entry.second) {
-            std::cout << "  Dest Port: " << portCount.first << "  Count: " << portCount.second << std::endl;
+            std::cout << "\t\tDest Port: " << portCount.first << "  Count: " << portCount.second << std::endl;
         }
     }
 }
@@ -34,15 +34,16 @@ void packetHandler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_c
     struct tcphdr *tcpHeader=NULL;
     struct udphdr *udpHeader=NULL;
     uint16_t destPort = 0;
+    uint32_t srcIP = 0;
     ipHeader = (struct ip *)(packet + 14);  // Skip Ethernet header (14 bytes)
 
     // Print timestamp
-    std::cout << "Timestamp: " << pkthdr->ts.tv_sec << "." << pkthdr->ts.tv_usec << "  ";
+    //std::cout << "Timestamp: " << pkthdr->ts.tv_sec << "." << pkthdr->ts.tv_usec << "  ";
 
     // Check protocol
-    std::cout << "Protocol: ";
+    //std::cout << "Protocol: ";
     if (ipHeader->ip_p == IPPROTO_TCP) {
-        std::cout << "TCP  ";
+        //std::cout << "TCP  ";
         tcpHeader = (struct tcphdr *)(packet + 14 + (ipHeader->ip_hl * 4));
         //std::cout << "Src IP: " << inet_ntoa(ipHeader->ip_src)
         //          << "  Src Port: " << ntohs(tcpHeader->th_sport)
@@ -50,7 +51,7 @@ void packetHandler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_c
         //          << "  Dest Port: " << ntohs(tcpHeader->th_dport) << std::endl;
         destPort = ntohs(tcpHeader->th_dport);
     } else if (ipHeader->ip_p == IPPROTO_UDP) {
-        std::cout << "UDP  ";
+        //std::cout << "UDP  ";
         udpHeader = (struct udphdr *)(packet + 14 + (ipHeader->ip_hl * 4));
         //std::cout << "Src IP: " << inet_ntoa(ipHeader->ip_src)
         //          << "  Src Port: " << ntohs(udpHeader->uh_sport)
@@ -58,8 +59,9 @@ void packetHandler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_c
         //          << "  Dest Port: " << ntohs(udpHeader->uh_dport) << std::endl;
         destPort = ntohs(udpHeader->uh_dport);
     }
+    srcIP = ipHeader->ip_src.s_addr;
     //connectionCount[ipHeader->ip_src][destPort]++;
-    connectionCount[23][destPort]++;
+    connectionCount[srcIP][destPort]++;
 }
 
 // Function to open a possibly compressed pcap file
