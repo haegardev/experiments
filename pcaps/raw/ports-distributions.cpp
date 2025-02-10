@@ -1,4 +1,4 @@
-// Skeleton created by AI
+// Skeleton created by AI, manually completed
 #include <iostream>
 #include <pcap.h>
 #include <zlib.h>
@@ -8,13 +8,32 @@
 #include <arpa/inet.h>
 #include <cstdio>
 #include <cstring>
+#include <unordered_map>
+
+// Data structure to store source IP -> destination port frequency
+std::unordered_map<uint32_t, std::unordered_map<uint16_t, int>> connectionCount;
+
+
+void printConnectionStats() {
+    std::cout << "\n=== Connection Statistics ===\n";
+    for (const auto &entry : connectionCount) {
+        const uint32_t srcIP = entry.first;
+        //std::cout << "Source IP: " << srcIP << " "<< inet_ntoa(srcIP) << std::endl;
+        std::cout << "Source IP: " << srcIP << " "<< srcIP << std::endl;
+        for (const auto &portCount : entry.second) {
+            std::cout << "  Dest Port: " << portCount.first << "  Count: " << portCount.second << std::endl;
+        }
+    }
+}
+
+
 
 // Function to handle each packet
 void packetHandler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_char *packet) {
     struct ip *ipHeader;
-    struct tcphdr *tcpHeader;
-    struct udphdr *udpHeader;
-
+    struct tcphdr *tcpHeader=NULL;
+    struct udphdr *udpHeader=NULL;
+    uint16_t destPort = 0;
     ipHeader = (struct ip *)(packet + 14);  // Skip Ethernet header (14 bytes)
 
     // Print timestamp
@@ -25,18 +44,22 @@ void packetHandler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_c
     if (ipHeader->ip_p == IPPROTO_TCP) {
         std::cout << "TCP  ";
         tcpHeader = (struct tcphdr *)(packet + 14 + (ipHeader->ip_hl * 4));
-        std::cout << "Src IP: " << inet_ntoa(ipHeader->ip_src)
-                  << "  Src Port: " << ntohs(tcpHeader->th_sport)
-                  << "  Dest IP: " << inet_ntoa(ipHeader->ip_dst)
-                  << "  Dest Port: " << ntohs(tcpHeader->th_dport) << std::endl;
+        //std::cout << "Src IP: " << inet_ntoa(ipHeader->ip_src)
+        //          << "  Src Port: " << ntohs(tcpHeader->th_sport)
+        //          << "  Dest IP: " << inet_ntoa(ipHeader->ip_dst)
+        //          << "  Dest Port: " << ntohs(tcpHeader->th_dport) << std::endl;
+        destPort = ntohs(tcpHeader->th_dport);
     } else if (ipHeader->ip_p == IPPROTO_UDP) {
         std::cout << "UDP  ";
         udpHeader = (struct udphdr *)(packet + 14 + (ipHeader->ip_hl * 4));
-        std::cout << "Src IP: " << inet_ntoa(ipHeader->ip_src)
-                  << "  Src Port: " << ntohs(udpHeader->uh_sport)
-                  << "  Dest IP: " << inet_ntoa(ipHeader->ip_dst)
-                  << "  Dest Port: " << ntohs(udpHeader->uh_dport) << std::endl;
+        //std::cout << "Src IP: " << inet_ntoa(ipHeader->ip_src)
+        //          << "  Src Port: " << ntohs(udpHeader->uh_sport)
+        //          << "  Dest IP: " << inet_ntoa(ipHeader->ip_dst)
+        //          << "  Dest Port: " << ntohs(udpHeader->uh_dport) << std::endl;
+        destPort = ntohs(udpHeader->uh_dport);
     }
+    //connectionCount[ipHeader->ip_src][destPort]++;
+    //connectionCount[23][destPort]++;
 }
 
 // Function to open a possibly compressed pcap file
@@ -108,6 +131,7 @@ int main(int argc, char *argv[]) {
     pcap_loop(handle, 0, packetHandler, nullptr);
 
     pcap_close(handle);
+    printConnectionStats();
     return 0;
 }
 
