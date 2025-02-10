@@ -19,7 +19,6 @@ void printConnectionStats() {
     std::cout << "\n=== Connection Statistics ===\n";
     for (const auto &entry : connectionCount) {
         const uint32_t srcIP = entry.first;
-        //std::cout << "Source IP: " << srcIP << " "<< inet_ntoa(srcIP) << std::endl;
         addr.s_addr = srcIP;
         std::cout << "Source IP: " << inet_ntoa(addr) << " " << std::endl;
         for (const auto &portCount : entry.second) {
@@ -43,26 +42,14 @@ void packetHandler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_c
     //std::cout << "Timestamp: " << pkthdr->ts.tv_sec << "." << pkthdr->ts.tv_usec << "  ";
 
     // Check protocol
-    //std::cout << "Protocol: ";
     if (ipHeader->ip_p == IPPROTO_TCP) {
-        //std::cout << "TCP  ";
         tcpHeader = (struct tcphdr *)(packet + 14 + (ipHeader->ip_hl * 4));
-        //std::cout << "Src IP: " << inet_ntoa(ipHeader->ip_src)
-        //          << "  Src Port: " << ntohs(tcpHeader->th_sport)
-        //          << "  Dest IP: " << inet_ntoa(ipHeader->ip_dst)
-        //          << "  Dest Port: " << ntohs(tcpHeader->th_dport) << std::endl;
         destPort = ntohs(tcpHeader->th_dport);
     } else if (ipHeader->ip_p == IPPROTO_UDP) {
-        //std::cout << "UDP  ";
         udpHeader = (struct udphdr *)(packet + 14 + (ipHeader->ip_hl * 4));
-        //std::cout << "Src IP: " << inet_ntoa(ipHeader->ip_src)
-        //          << "  Src Port: " << ntohs(udpHeader->uh_sport)
-        //          << "  Dest IP: " << inet_ntoa(ipHeader->ip_dst)
-        //          << "  Dest Port: " << ntohs(udpHeader->uh_dport) << std::endl;
         destPort = ntohs(udpHeader->uh_dport);
     }
     srcIP = ipHeader->ip_src.s_addr;
-    //connectionCount[ipHeader->ip_src][destPort]++;
     connectionCount[srcIP][destPort]++;
 }
 
@@ -72,7 +59,6 @@ pcap_t* open_pcap_file(const char* filename, char* errbuf) {
 
     // Check if the file has a .gz extension (compressed)
     if (strlen(filename) > 3 && strcmp(filename + strlen(filename) - 3, ".gz") == 0) {
-        std::cout << "Detected compressed PCAP file, decompressing..." << std::endl;
 
         gzFile gzfp = gzopen(filename, "rb");
         if (!gzfp) {
@@ -131,11 +117,10 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    std::cout << "Reading from file: " << argv[1] << std::endl;
     pcap_loop(handle, 0, packetHandler, nullptr);
 
     pcap_close(handle);
-    printConnectionStats();
+    //printConnectionStats();
     return 0;
 }
 
