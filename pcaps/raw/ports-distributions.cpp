@@ -15,11 +15,13 @@ std::unordered_map<uint32_t, std::unordered_map<uint16_t, int>> connectionCount;
 
 
 void printConnectionStats() {
+    struct in_addr addr;
     std::cout << "\n=== Connection Statistics ===\n";
     for (const auto &entry : connectionCount) {
         const uint32_t srcIP = entry.first;
         //std::cout << "Source IP: " << srcIP << " "<< inet_ntoa(srcIP) << std::endl;
-        std::cout << "Source IP: " << srcIP << " "<< srcIP << std::endl;
+        addr.s_addr = srcIP;
+        std::cout << "Source IP: " << inet_ntoa(addr) << " " << std::endl;
         for (const auto &portCount : entry.second) {
             std::cout << "\t\tDest Port: " << portCount.first << "  Count: " << portCount.second << std::endl;
         }
