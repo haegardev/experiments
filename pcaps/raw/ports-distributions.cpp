@@ -59,7 +59,7 @@ void packetHandler(u_char *userData, const struct pcap_pkthdr *pkthdr, const u_c
         destPort = ntohs(udpHeader->uh_dport);
     }
     //connectionCount[ipHeader->ip_src][destPort]++;
-    //connectionCount[23][destPort]++;
+    connectionCount[23][destPort]++;
 }
 
 // Function to open a possibly compressed pcap file
