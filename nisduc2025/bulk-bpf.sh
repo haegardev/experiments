@@ -52,13 +52,17 @@ if is_number "$year"; then
     if is_number "$month"; then
         if is_number "$day"; then
             TD="$TARGET/$year/$month/$day/"
+            TF="$TD/$filename"
             # Create the directory structure and  apply BPF filter
-            if [ ! -d "$TD" ]; then
+            if [ ! -d "$TF" ]; then
                 mkdir -p $TD
             fi
-            TF="$TD/$filename"
-            zcat $FILENAME | tcpdump -n -r - -w - $BPF_FILTER | gzip -c > $TF
-          echo $TD
+            if [ -e $TF ]; then
+                echo "Target file $TF already exist, skip" >&2
+                exit 0
+            else
+                zcat $FILENAME | tcpdump -n -r - -w - $BPF_FILTER | gzip -c > $TF
+            fi
         fi
     fi
 fi
