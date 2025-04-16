@@ -14,7 +14,7 @@ parser.add_argument("--root", type=str,help="Directory where the aggregated data
 args = parser.parse_args()
 
 # Derive date from filename
-base = args.filename.partition('.')[0]
+base = os.path.basename(args.filename.partition('.')[0])
 date_items = base.split('-')
 date_items = date_items[1:]
 
