@@ -34,8 +34,13 @@ if (os.path.exists(target_file)):
     print (f"Target file ({target_file}) already exists skip it")
     sys.exit(0)
 
-if (os.path.exists(target_dir) == False):
-    os.makedirs(target_dir)
+# Due to concurrency issues it could be that two processed want to create the
+# same directory at the same time
+try:
+    if (os.path.exists(target_dir) == False):
+        os.makedirs(target_dir)
+except OSError as e:
+    pass
 
 # store the unique lines and their counts
 with open(target_file, 'w', encoding='utf-8') as file:
