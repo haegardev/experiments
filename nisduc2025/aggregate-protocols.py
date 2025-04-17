@@ -40,5 +40,15 @@ for file in files:
                print (f"[ERROR] cannot parse: {line}")
                traceback.print_exc()
 
-# Write the aggregated data
-pprint.pprint(data)
+# open file on last timestamp
+target_file = args.root  + os.sep + first + ".lst"
+if os.path.exists(target_file):
+    print (f"target_file {target_file} already exists")
+    sys.exit(1)
+
+
+sorted_dict = dict(sorted(data.items(), key=lambda item: item[1],reverse=True))
+with open(target_file, 'w', encoding='utf-8') as file:
+    for k in sorted_dict:
+        file.write(k + "," + str(data[k]) + "\n")
+file.close()
