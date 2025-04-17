@@ -41,6 +41,11 @@ for file in files:
                traceback.print_exc()
 
 # open file on last timestamp
+if first is None:
+    d = args.directory
+    print (f"ERROR Could not find a timestamp. dirname={directory}.Abort. Data dump is shown below")
+    pprint.pprint(data)
+    sys.exit(1)
 target_file = args.root  + os.sep + first + ".lst"
 if os.path.exists(target_file):
     print (f"target_file {target_file} already exists")
