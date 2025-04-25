@@ -1,0 +1,51 @@
+
+Description: Misconfigured  TETRA (Terrestrial Trunked Radio) devices.
+
+TETRA is a professional mobile radio (PMR) and two-way transceiver specification
+developed by the European Telecommunications Standards Institute (ETSI).
+It's primarily used for critical communications, especially by:
+
+- Public safety agencies (police, fire, ambulance)
+- Military and defense
+- Utilities and transport sectors
+- Governmental organizations
+
+
+Source of picture: PT580_0.jpg  https://www.comtec-do.de/hytera-tetra/
+
+tshark -n -r pcap  -Y "ip && udp && tetra" -T json
+
+Extract MAC addresses from Tetra messages
+
+00:00:24:cd:82:21 -> HOERKAER 7-9 DK
+
+Identified in tetra traffic extracted with tshark
+
+
+
+"tetra": {
+          "tetra.carrier": "46",
+          "tetra.header": {
+            "tetra.timer": "0x5050"
+          }
+
+
+  "eth": {
+          "eth.dst": "00:00:24:cd:82:21",
+          "eth.dst_tree": {
+            "eth.dst_resolved": "00:00:24:cd:82:21",
+            "eth.dst.oui": "36",
+            "eth.dst.oui_resolved": "Connect As",
+            "eth.addr": "00:00:24:cd:82:21",
+            "eth.addr_resolved": "00:00:24:cd:82:21",
+            "eth.addr.oui": "36",
+            "eth.addr.oui_resolved": "Connect As",
+            "eth.dst.lg": "0",
+            "eth.lg": "0",
+            "eth.dst.ig": "0",
+            "eth.ig": "0"
+          },
+
+
+
+
