@@ -1,0 +1,25 @@
+Extracted from  eth:ethertype:ip:udp:infiniband
+
+references: https://www.dahuasecurity.com/asset/upload/uploads/soft/20200805/DH-IPC-HFW5221E-Z_Datasheet_202008052.pdf
+
+features:
+- Face Detection
+- Face Attributes
+- Perimeter Protection
+- People Counting
+
+Example:
+
+<a:Address>uuid:a004713c-1852-4b16-939e-b99e46d67852</a:Address>
+        </a:EndpointReference>
+        <d:Types>dn:NetworkVideoTransmitter tds:Device</d:Types>
+        <d:Scopes>
+          onvif://www.onvif.org/location/country/china
+          onvif://www.onvif.org/name/Dahua
+          onvif://www.onvif.org/hardware/IPC-HFW5221D-Z
+          onvif://www.onvif.org/Profile/Streaming
+          onvif://www.onvif.org/type/Network_Video_Transmitter
+          onvif://www.onvif.org/extension/unique_identifier
+          onvif://www.onvif.org/Profile/Q/Operational
+        </d:Scopes>
+        <d:XAddrs>http://192.168.202.128/onvif/device_service</d:XAddrs>
