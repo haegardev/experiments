@@ -1,0 +1,25 @@
+ "r-goose": {
+          "rgoose.session_hdr": {
+            "rgoose.spdu_id": "0xa1",
+            "rgoose.session_hdr_len": "93",
+            "rgoose.common_session_id": "0xcd",
+            "rgoose.hdr_len": "87",
+            "rgoose.spdu_len": "3382961228",
+            "rgoose.spdu_num": "3752272001",
+            "rgoose.version": "0x2cce",
+            "rgoose.sec_info": {
+              "rgoose.curr_key_t": "0x3eab889b",
+              "rgoose.next_key_t": "0xbdf0",
+              "rgoose.key_id": "0x1672772a",
+              "rgoose.init_v_len": "243",
+              "rgoose.init_v": "2f:28:8b:7c:85:e2:11:73:5b:29:91:25:9e:08:b0:33:28:ed:5b:77:49:20:af:48:8a:99:cb:56:38:6b:8f:50:8d:1f:05:0b:7e:51:94:f5:b1:f5:8b:71:3f:a7:70:53:36:8f:a8:56:10:c8:e1:1c:0d:bd:ed:81:be:82:64:fa:13:a2:a4:4d:b6:02:01:b5:5c:2c:e3:e8:ed:67:54:f6:2d:cf:8d:45:f6:14:3f:0c:02:fa:4d:57:a8:fb:61:9d:37:32:b9:6c:ed:14:cf:fb:8e:ac:7b:d1:9c:74:43:9f:40:7c:c7:b2:c8:11:32:61:98:aa:36:7a:8f:d2:40:44:35:21:e8:93:6b:f8:ae:f3:fa:6a:18:62:a4:e4:9e:37:b3:43:ba:11:47:37:58:f2:20:0b:b5:e7:94:cd:d9:28:9b:49:ab:21:51:ba:72:a0:e3:28:cc:46:4a:1c:92:7d:97:59:18:5a:cb:2a:96:8f:2b:ff:38:d4:57:6b:ad:42:2c:6a:e0:c1:37:7e:1e:a8:60:54:c1:4d:96:03:0f:5d:af:32:68:a7:97:56:cf:dc:b7:98:ff:63:4f:60:c4:01:08:aa:db:4b:a4:0a:16:bc:f5:1a:a8:73:a5:10:5a:57:a3:5b:53"
+            }
+          },
+          "rgoose.session_user_info": {
+            "rgoose.payload": {
+              "rgoose.payload_len": "995700754",
+              "rgoose.pdu_tag": "0x22",
+              "rgoose.simulation": "0x4c",
+              "rgoose.appid": "0xd650"
+            }
+
