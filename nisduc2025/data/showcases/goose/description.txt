@@ -1,4 +1,10 @@
- "r-goose": {
+Hypothesis:
+
+OT and IT segregation is often done with firewalls. While inbound traffic is well filtered outbound is not
+
+
+
+"r-goose": {
           "rgoose.session_hdr": {
             "rgoose.spdu_id": "0xa1",
             "rgoose.session_hdr_len": "93",
