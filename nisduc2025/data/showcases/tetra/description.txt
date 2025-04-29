@@ -1,0 +1,55 @@
+
+Description: Misconfigured  TETRA (Terrestrial Trunked Radio) devices.
+
+TETRA is a professional mobile radio (PMR) and two-way transceiver specification
+developed by the European Telecommunications Standards Institute (ETSI).
+It's primarily used for critical communications, especially by:
+
+- Public safety agencies (police, fire, ambulance)
+- Military and defense
+- Utilities and transport sectors
+- Governmental organizations
+
+
+Source of picture: PT580_0.jpg  https://www.comtec-do.de/hytera-tetra/
+
+tshark -n -r pcap  -Y "ip && udp && tetra" -T json
+
+Extract MAC addresses from Tetra messages
+
+
+Identified in tetra traffic extracted with tshark
+
+
+
+"tetra": {
+          "tetra.carrier": "46",
+          "tetra.header": {
+            "tetra.timer": "0x5050"
+          }
+
+
+Findings
+
+- 1860 unique source IP addresses
+- Many scanners connecting to more than 1 destination IPs
+- All source IP connecting to more than 1 destination IP addresses are considered as scanner
+- 1700 source IP addresses sending tetra packets to 1 IP address of blackhole
+- Most frequent message: {'tetra.carrier': '0', 'tetra.header': {'tetra.timer': '0x xx'}} where xx is a number
+- Most frequent message was omitted: 176 other messages were observed
+
+Example Tetra message:
+
+{'tetra.carrier': '47', 'tetra.header': {'tetra.timer': '0x6cef', 'tetra.txreg': '0xf8fd', 'tetra.channels': '2', 'tetra.channels_tree': {'tetra.txchannel1': '3', 'tetra.pdu': '', 'tetra.pdu_tree': {'tetra.MAC_RESOURCE_element': {'tetra.pdu_type': '0', 'per.enum_index': '18', 'tetra.fill_bit_indication': '1', 'tetra.position_of_grant': '1', 'tetra.encryption_mode': '0', 'tetra.access_ack': '1', 'tetra.lengthIndication': '18', 'per.choice_index': '7', 'tetra.address': '7', 'tetra.address_tree': {'tetra.smi_eventLabel_element': {'tetra.smi_eventlabel': 'fd:a0:15:a3:c0', 'tetra.other_element': {'per.choice_index': '1', 'tetra.power_control': '1', 'tetra.power_control_tree': {'per.enum_index': '8', 'tetra.powerParameters': '8'}, 'tetra.slot_granting': '0', 'tetra.slot_granting_tree': {'tetra.none_element': ''}, 'tetra.channel_allocation': '1', 'tetra.channel_allocation_tree': {'tetra.channel_allocation_element_element': {'per.enum_index': '1', 'tetra.allocation_type': '0', 'tetra.timeslot_assigned': '7', 'tetra.up_down_assigned': '1', 'tetra.clch_permission': '1', 'tetra.cell_change': '1', 'tetra.carrier_number': '2535', 'per.choice_index': '1', 'tetra.extend_carrier_flag': '1', 'tetra.extend_carrier_flag_tree': {'tetra.extended_element': {'tetra.frequency_band': '5', 'tetra.offset': '3', 'tetra.duplex_spacing': '1', 'per.enum_index': '0', 'tetra.reverse_operation': '0'}}, 'tetra.monitoring_pattern': '1', 'tetra.monitoring_pattern_tree': {'tetra.none1_element': ''}}}, 'tetra.tm_sdu': '1', 'tetra.tm_sdu_tree': {'tetra.bl_data_element': {'tetra.ns': '0', 'per.choice_index': '1', 'tetra.tl_sdu': '1', 'tetra.tl_sdu_tree': {'per.choice_index': '8', 'tetra.mm': '8', 'tetra.mm_tree': {'tetra.d_MM_reserved2_element': ''}}}}}}}}}, 'tetra.txchannel2': '14'}}}
+
+
+Encrypted packets: Air Interface Encryption (AIE) only
+
+Example:  {'tetra.carrier': '55', 'tetra.header': {'tetra.timer': '0x3be2', 'tetra.txreg': '0x48bd', 'tetra.channels': '2', 'tetra.channels_tree': {'tetra.txchannel1': '2', 'tetra.pdu': '16:1a:9c:09:c1:a8:73:7b:1c:bd:00:00:4c:00:00:00:0b:00:00:00:01:00:00:00:00:00:00:00:00:00:00:00:00:00', 'tetra.pdu_tree': {'tetra.MAC_RESOURCE_element': {'tetra.pdu_type': '0', 'per.enum_index': '3', 'tetra.fill_bit_indication': '0', 'tetra.position_of_grant': '1', 'tetra.encryption_mode': '1', 'tetra.access_ack': '1', 'tetra.lengthIndication': '3', 'per.choice_index': '2', 'tetra.address': '2', 'tetra.address_tree': {'tetra.eventLabel_element': {'tetra.eventlabel': '624', 'tetra.other_element': {'per.choice_index': '1', 'tetra.power_control': '0', 'tetra.power_control_tree': {'tetra.none_element': ''}, 'tetra.slot_granting': '0', 'tetra.slot_granting_tree': {'tetra.none_element': ''}, 'tetra.channel_allocation': '1', 'tetra.channel_allocation_tree': {'tetra.channel_allocation_element_element': {'per.enum_index': '0', 'tetra.allocation_type': '0', 'tetra.timeslot_assigned': '14', 'tetra.up_down_assigned': '0', 'tetra.clch_permission': '0', 'tetra.cell_change': '0', 'tetra.carrier_number': '3395', 'per.choice_index': '3', 'tetra.extend_carrier_flag': '1', 'tetra.extend_carrier_flag_tree': {'tetra.extended_element': {'tetra.frequency_band': '3', 'tetra.offset': '1', 'tetra.duplex_spacing': '7', 'per.enum_index': '0', 'tetra.reverse_operation': '0'}}, 'tetra.monitoring_pattern': '3', 'tetra.monitoring_pattern_tree': {'tetra.none3_element': ''}}}, 'tetra.tm_sdu': '1', 'tetra.tm_sdu_tree': {'tetra.bl_data_element': {'tetra.ns': '1', 'per.choice_index': '4', 'tetra.tl_sdu': '4', 'tetra.tl_sdu_tree': {'tetra.sndcp_element': ''}}}}}}}}, 'tetra.txchannel2': '2'}}}
+
+Packets were grouped into groups of source IPs. The packet in each group were
+counted.
+
+
+Longest tetra packet sender: sent 902 tetra packets only  {'tetra.carrier': '40', 'tetra.header': {'tetra.timer': '0x5c00'}}
+
