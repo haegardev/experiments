@@ -3,9 +3,11 @@ import argparse
 import json
 from  datetime import datetime
 import pprint
+import os
 
 parser = argparse.ArgumentParser(description="Read the parallized output of tetra.py and filter out scanners")
 parser.add_argument("--filename", type=str, help="Output file created by tetra.py")
+parser.add_argument("--export", type=str, help="Directory where the grouped packets show be exported")
 args = parser.parse_args()
 f = open(args.filename, "r")
 data = dict()
@@ -33,10 +35,9 @@ for line in f.readlines():
 
 # print only the IP addresses that connected to less than t destination ip addresses
 
-
 for ip_src in data:
     if len(data[ip_src].keys()) < 2:
-        out =  [] 
+        out =  []
         for target_ip in data[ip_src]:
             # Merge all entries according timestamp as they were previously grouped by target_ip
             for ts in data[ip_src][target_ip]:
@@ -44,6 +45,11 @@ for ip_src in data:
                     out.append(line)
         # sort according timestamp
         out.sort()
+        g = None
+        if args.export:
+            targetfile=args.export + os.sep + ip_src + ".txt"
+            g = open(targetfile,"w")
+            print (targetfile)
         for  line in out:
             t = line.split()
             ts0 = t[0]
@@ -52,4 +58,9 @@ for ip_src in data:
             dt = datetime.utcfromtimestamp(int(ts))
             tsf =  dt.strftime("%Y-%m-%d %H:%M:%S")
             new_line = tsf + " "  + " ".join(rest)
-            print (new_line)
+            if g is not None:
+                g.write(new_line+"\n")
+            else:
+                print (new_line)
+        if g is not None:
+            g.close()
