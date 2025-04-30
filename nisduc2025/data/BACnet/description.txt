@@ -1,0 +1,56 @@
+BACnet (Building Automation and Control Network) is a standardized protocol (ISO 16484-5) used for communication in building automation systems, including:
+
+- HVAC
+- Lighting
+- Access control
+- Fire detection
+
+
+Example:
+
+47808 {
+  'bacapp.type': '0',
+  'bacapp.pduflags': '0x00',
+  'bacapp.pduflags_tree': {
+    'bacapp.segmented_request': '0',
+    'bacapp.more_segments': '0',
+    'bacapp.SA': '0'
+  },
+  'bacapp.response_segments': '0',
+  'bacapp.max_adpu_size': '5',
+  'bacapp.invoke_id': '133',
+  'bacapp.confirmed_service': '12',
+  'ObjectIdentifier: device, 4194303': {
+    'Context Tag: 0, Length/Value/Type: 4': {
+      'bacapp.tag_class': '1',
+      'bacapp.context_tag_number': '0',
+      'bacapp.LVT': '4'
+    },
+    'bacapp.objectType': '8',
+    'bacapp.instance_number': '4194303'
+  },
+  'Property Identifier: object-identifier (75)': {
+    'Context Tag: 1, Length/Value/Type: 1': {
+      'bacapp.tag_class': '1',
+      'bacapp.context_tag_number': '1',
+      'bacapp.LVT': '1'
+    },
+    'bacapp.property_identifier': '75'
+  }
+}
+
+
+Field	Meaning
+bacapp.type = 0	Confirmed Request PDU — expects a response
+confirmed_service = 12	Read Property service
+invoke_id = 133	Request ID (used to match request and response)
+max_adpu_size = 5	Size of the ADPU in octets (Application Data Protocol Unit)
+Object Identifier	Target is a device, instance number 4194303 (the maximum valid instance number in BACnet – often used for broadcasts or "unknown devices")
+Property Identifier = 75	This is the object-identifier property — commonly used to request basic metadata about a device or object
+
+23311 unique IP addresses sedning BACnet packets
+
+There are a lot of scanners i.e. rapid7labs
+
+
+need to be filtered
