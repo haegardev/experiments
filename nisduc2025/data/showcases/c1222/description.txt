@@ -1,0 +1,5 @@
+5704 malformed messages
+Only one message content:  {'c1222.MESSAGE_element': ''}
+
+21 unique IPS
+
