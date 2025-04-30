@@ -29,3 +29,75 @@ OT and IT segregation is often done with firewalls. While inbound traffic is wel
               "rgoose.appid": "0xd650"
             }
 
+- Goose 
+
+53 uinique IPs are doings goose
+
+IEC 61850 GOOSE is 
+- not IP based
+- not udp based
+- Runs over Layer 2 Ethernet multicast
+- Uses EtherType 0x88b8
+- No use of COTP or CLNP
+
+=> not standard goose
+
+
+To investigate: Vendor-Specific GOOSE over UDP
+- Remote monitoring
+- Simulation/test tools
+
+
+Example packets:
+
+  "r-goose": {
+          "rgoose.session_hdr": {
+            "rgoose.spdu_id": "0xa1",
+            "rgoose.session_hdr_len": "139",
+            "rgoose.common_session_id": "0xcf",
+            "rgoose.hdr_len": "175",
+            "rgoose.spdu_len": "690860800",
+            "rgoose.spdu_num": "3299753812",
+            "rgoose.version": "0x0d45",
+            "rgoose.sec_info": {
+              "rgoose.curr_key_t": "0x9d99010c",
+              "rgoose.next_key_t": "0x010a",
+              "rgoose.key_id": "0x00000000",
+              "rgoose.init_v_len": "1",
+              "rgoose.init_v": "94"
+            }
+          },
+          "rgoose.session_user_info": {
+            "rgoose.payload": {
+              "rgoose.payload_len": "1054018710",
+              "rgoose.pdu_tag": "0xcf",
+              "rgoose.simulation": "0xaf",
+              "rgoose.appid": "0x292d"
+            }
+          }
+
+
+"r-goose": {
+          "rgoose.session_hdr": {
+            "rgoose.spdu_id": "0xa1",
+            "rgoose.session_hdr_len": "77",
+            "rgoose.common_session_id": "0xc1",
+            "rgoose.hdr_len": "40",
+            "rgoose.spdu_len": "2999125713",
+            "rgoose.spdu_num": "847904200",
+            "rgoose.version": "0xd0f5",
+            "rgoose.sec_info": {
+              "rgoose.curr_key_t": "0x6b9e83f9",
+              "rgoose.next_key_t": "0xdbb3",
+              "rgoose.key_id": "0xb6cddaa3",
+              "rgoose.init_v_len": "136",
+              "rgoose.init_v": "e3:a3:d8:18:24:9c:04:0f:2e:85:42:af:4a:3f:40:f7:30:56:67:18:1f:a0:a8:24:2b:e8:0a:dc:1c:72:39:8f:91:2f:ab:da:8a:9a:e3:a6:71:b0:1f:54:7e:18:94:0a:57:70:ee:9a:77:8c:e6:ae:cb:9f:1d:f0:9b:f6:05:9d:f7:82:de:c5:3d:63:95:5f:4e:2d:4f:34:85:f2:04:76:d9:ca:08:23:f1:51:55:3d:67:03:ee:93:c9:b9:bd:b5:77:f3:3a:fe:60:4f:3c:5f:d7:0d:2a:33:29:0f:0b:c7:24:63:f9:11:2d:b7:45:c7:b7:50:de:b6:da:ba:6a:4f:c1:4d:2a:fb:eb:f1:9c:db"
+            }
+          },
+          "rgoose.session_user_info": {
+            "rgoose.payload": {
+              "rgoose.payload_len": "1698390559",
+              "rgoose.pdu_tag": "0x6e",
+              "rgoose.simulation": "0xd0",
+              "rgoose.appid": "0xb2f2"
+            }
