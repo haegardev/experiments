@@ -21,5 +21,5 @@ end=$(( start + chunk ))
 for ((i=start; i<end; i++)); do
   f="${files[$i]}"
   echo "rank $rank processing $f"
-  #./process_one_file "$f"
+  ./job-hpc.sh $f $rank
 done
