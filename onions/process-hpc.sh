@@ -6,9 +6,6 @@
 rank="${SLURM_PROCID}"
 ntasks="${SLURM_NTASKS}"
 
-rank=$1
-ntasks=4
-
 mapfile -t files < files.txt
 n="${#files[@]}"
 
