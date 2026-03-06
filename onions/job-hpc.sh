@@ -8,10 +8,10 @@ URL="$BASEURL/$URI"
 tmpfile=$(mktemp)
 trap 'rm -f "$tmpfile"' EXIT
 
-echo "[TRACE][NODE=$NODE,PID=$$][`date`] Downloading file $URL" >&2
+echo "[TRACE][NODE=$NODE,PID=$$][`date`] Downloading file $URI" >&2
 wget --quiet $URL -O $tmpfile
 E=$?
 echo "[TRACE][NODE=$NODE,PID=$$][`date`] Wget exit code $E" >&2
-echo "[TRACE][NODE=$NODE,PID=$$][`date`] Processing file $URL" >&2
+echo "[TRACE][NODE=$NODE,PID=$$][`date`] Processing file $URI" >&2
 zcat $tmpfile | grep -a onion | tr ' "><' '\n' | grep "\.onion$"
-echo "[TRACE][NODE=$NODE,PID=$$][`date`] Job for $URL done" >&2
+echo "[TRACE][NODE=$NODE,PID=$$][`date`] Job for $URI done" >&2
