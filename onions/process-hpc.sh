@@ -17,6 +17,6 @@ end=$(( start + chunk ))
 
 for ((i=start; i<end; i++)); do
   f="${files[$i]}"
-  echo "rank $rank processing $f"
+  echo "Executing job on  $rank URI $f" >&2
   ./job-hpc.sh $f $rank
 done
